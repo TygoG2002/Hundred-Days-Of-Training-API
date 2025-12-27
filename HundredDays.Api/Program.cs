@@ -15,9 +15,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddInfrastructure();
-builder.Services.AddApplication(); 
 
+
+builder.Services.AddApplication();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddInfrastructure(connectionString!);
 
 var app = builder.Build();
 app.UseCors("BlazorDev");

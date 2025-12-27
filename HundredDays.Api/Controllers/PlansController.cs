@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HundredDays.Application.Plans.GetPlans;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HundredDays.Api.Controllers;
 
@@ -6,24 +8,21 @@ namespace HundredDays.Api.Controllers;
 [Route("api/plans")]
 public class PlansController : ControllerBase
 {
+    private readonly IMediator _mediator;
+
+    public PlansController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     [HttpGet]
-    public IActionResult GetPlans()
+    //GET to api/plans
+    public async Task<IActionResult> GetPlans()
     {
-        return Ok(new[]
-        {
-            new { Id = 1, Name = "Push-ups", TargetReps = 100 },
-            new { Id = 2, Name = "test", TargetReps = 200 },
-            new { Id = 3, Name = "test", TargetReps = 20 }
-        });
+        GetPlansQuery query = new GetPlansQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
-
-    // GET /api/plans/{planId}/days
-    [HttpGet("{planId}/days")]
-    public async Task<IActionResult> GetDays(int planId)
-    {
-        return Ok(new List<int>() { 1, 2 });
-    }
-
 
 
 

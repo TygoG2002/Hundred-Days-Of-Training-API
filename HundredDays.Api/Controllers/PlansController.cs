@@ -1,4 +1,5 @@
 ﻿using Application.Plans.GetDays;
+using Application.Plans.GetSets;
 using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,9 @@ public class PlansController : ControllerBase
     [HttpGet("{planId}/days/{day}/sets")]
     public async Task<IActionResult> GetSets(int planId, int day)
     {
-
+        GetSetsQuery query = new GetSetsQuery(planId, day);
+        var result = await _mediator.Send(query);
+        return Ok(result);
 
     }
 }

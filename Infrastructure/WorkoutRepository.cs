@@ -15,7 +15,7 @@ namespace Infrastructure
 
         public WorkoutRepository(AppDbContext db)
         {
-            _db = db; 
+            _db = db;
         }
 
         public async Task<List<WorkoutPlan>> GetAllAsync()
@@ -23,7 +23,7 @@ namespace Infrastructure
             return await _db.WorkoutPlans
                 .AsNoTracking()
                 .ToListAsync();
-        
+
         }
 
         public async Task<List<int>> GetDays(int planId)
@@ -34,6 +34,13 @@ namespace Infrastructure
                 .ToListAsync();
         }
 
-       
+        public async Task<List<WorkoutSet>> GetSets(int planId, int day)
+        {
+            return await _db.WorkoutDays
+                .Where(d => d.WorkoutPlanId == planId && d.DayNumber == day)
+                .SelectMany(d => d.Sets)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

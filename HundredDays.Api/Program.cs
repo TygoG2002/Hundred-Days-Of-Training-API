@@ -1,6 +1,8 @@
+using Application;
+using Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// ?? CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("BlazorDev", policy =>
@@ -13,10 +15,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddInfrastructure();
+builder.Services.AddApplication(); 
+
 
 var app = builder.Build();
-
-// ? CORS MOET vóór MapControllers
 app.UseCors("BlazorDev");
 
 app.UseAuthorization();

@@ -16,4 +16,15 @@ public class PlansController : ControllerBase
             new { Id = 3, Name = "test", TargetReps = 20 }
         });
     }
+
+    // GET /api/plans/{planId}/days
+    [HttpGet("{planId}/days")]
+    public async Task<IActionResult> GetDays(int planId)
+    {
+        return Ok(new List<int>() { 1, 2 });
+    }
+
+
+
+
 }

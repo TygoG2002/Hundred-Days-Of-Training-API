@@ -11,5 +11,7 @@ namespace Application.interfaces
         Task<List<int>> GetDays(int planId);
         Task<List<WorkoutSet>> GetSets(int planId, int day );
 
+        Task UpdateSet(int planId, int day, int index, bool completed);
+
     }
 }

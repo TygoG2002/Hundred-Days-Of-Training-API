@@ -42,5 +42,10 @@ namespace Infrastructure
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public Task UpdateSet(int planId, int day, int index, bool completed)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

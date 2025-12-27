@@ -45,4 +45,11 @@ public class PlansController : ControllerBase
         return Ok(result);
 
     }
+
+
+    [HttpPost("{planId}/days/{day}/sets/{index}")]
+    public async Task <IActionResult> UpdateSet(int planId, int day, int index)
+    {
+
+    }
 }

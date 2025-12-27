@@ -1,5 +1,6 @@
 ﻿using Application.Plans.GetDays;
 using Application.Plans.GetSets;
+using Application.Plans.UpdateSet;
 using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -48,8 +49,11 @@ public class PlansController : ControllerBase
 
 
     [HttpPost("{planId}/days/{day}/sets/{index}")]
-    public async Task <IActionResult> UpdateSet(int planId, int day, int index)
+    public async Task<IActionResult> UpdateSet(int planId ,int day ,int index , [FromBody] bool completed)
     {
+        await _mediator.Send(new UpdateSetCommand(planId, day, index, completed));
 
+        return NoContent();
     }
+
 }

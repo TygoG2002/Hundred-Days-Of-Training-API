@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -25,5 +26,14 @@ namespace Infrastructure
         
         }
 
+        public async Task<List<int>> GetDays(int planId)
+        {
+            return await _db.WorkoutDays
+                .Where(k => k.WorkoutPlanId == planId)
+                .Select(k => k.DayNumber)
+                .ToListAsync();
+        }
+
+       
     }
 }

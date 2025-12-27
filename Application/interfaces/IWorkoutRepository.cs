@@ -7,6 +7,7 @@ namespace Application.interfaces
 {
     public  interface IWorkoutRepository
     {
-         Task<List<WorkoutPlan>> GetAllAsync();  
+         Task<List<WorkoutPlan>> GetAllAsync();
+        Task<List<int>> GetDays(int planId); 
     }
 }

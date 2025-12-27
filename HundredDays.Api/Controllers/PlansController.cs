@@ -33,4 +33,13 @@ public class PlansController : ControllerBase
         var result = await _mediator.Send(new GetDaysQuery(planId));
         return Ok(result);
     }
+
+
+    // GET /api/plans/{planId}/days/{day}/sets
+    [HttpGet("{planId}/days/{day}/sets")]
+    public async Task<IActionResult> GetSets(int planId, int day)
+    {
+
+
+    }
 }

@@ -1,4 +1,5 @@
-﻿using HundredDays.Application.Plans.GetPlans;
+﻿using Application.Plans.GetDays;
+using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,5 +26,11 @@ public class PlansController : ControllerBase
     }
 
 
-
+    // GET /api/plans/{planId}/days
+    [HttpGet("{planId}/days")]
+    public async Task<IActionResult> GetDays(int planId)
+    {
+        var result = await _mediator.Send(new GetDaysQuery(planId));
+        return Ok(result);
+    }
 }

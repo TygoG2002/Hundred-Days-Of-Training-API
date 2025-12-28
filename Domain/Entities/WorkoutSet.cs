@@ -4,7 +4,7 @@ public class WorkoutSet
 {
     public int Id { get; private set; }
     public int Reps { get; private set; }
-    public bool Completed { get; private set; }
+    public bool Completed { get;  set; }
 
     public int WorkoutDayId { get; private set; }
     public WorkoutDay Day { get; private set; } = null!;
@@ -17,13 +17,8 @@ public class WorkoutSet
         Completed = false;
     }
 
-    public void MarkCompleted()
+    public void MarkCompleted(bool completed)
     {
-        Completed = true;
-    }
-
-    public void MarkIncomplete()
-    {
-        Completed = false;
+        Completed = completed;
     }
 }

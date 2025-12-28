@@ -10,8 +10,7 @@ namespace Application.interfaces
         Task<List<WorkoutPlan>> GetAllAsync();
         Task<List<int>> GetDays(int planId);
         Task<List<WorkoutSet>> GetSets(int planId, int day );
-
-        Task UpdateSet(int planId, int day, int index, bool completed);
-
+        Task UpdateSet(int setId, bool completed);
+        Task<(int done, int total)> GetDayProgress(int planId, int day);
     }
 }

@@ -18,7 +18,7 @@ namespace Application.Plans.UpdateSet
 
         public async Task Handle(UpdateSetCommand request, CancellationToken cancellationToken)
         {
-             await _workoutRepository.UpdateSet(request.planId, request.day, request.index, request.completed);
+             await _workoutRepository.UpdateSet(request.setId, request.completed);
            
         }
     }

@@ -26,6 +26,19 @@ namespace Infrastructure
 
         }
 
+        public async Task<(int done, int total)> GetDayProgress(int planId, int day)
+        {
+            var sets = await _db.WorkoutDays
+                .Where(d => d.WorkoutPlanId == planId && d.DayNumber == day)
+                .SelectMany(d => d.Sets)
+                .ToListAsync();
+
+            return (
+                sets.Count(s => s.Completed),
+                sets.Count
+            );
+        }
+
         public async Task<List<int>> GetDays(int planId)
         {
             return await _db.WorkoutDays
@@ -43,28 +56,12 @@ namespace Infrastructure
                 .ToListAsync();
         }
 
-        public async Task UpdateSet(int planId, int day, int index, bool completed)
+        public async Task UpdateSet(int setId, bool completed)
         {
-            var workoutDay = await _db.WorkoutDays
-                .Include(d => d.Sets)
-                .FirstOrDefaultAsync(d =>
-                    d.WorkoutPlanId == planId &&
-                    d.DayNumber == day);
+            var set = await _db.WorkoutSets
+                .FirstAsync(s => s.Id == setId);
 
-            if (workoutDay == null)
-                throw new InvalidOperationException("Workout day not found");
-
-            if (index < 0 || index >= workoutDay.Sets.Count)
-                throw new IndexOutOfRangeException("Invalid set index");
-
-            var set = workoutDay.Sets
-                .OrderBy(s => s.Id)   
-                .ElementAt(index);
-
-            if (completed)
-                set.MarkCompleted();
-            else
-                set.MarkIncomplete();
+            set.MarkCompleted(completed);
 
             await _db.SaveChangesAsync();
         }

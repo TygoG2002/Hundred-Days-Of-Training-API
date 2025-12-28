@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Plans.UpdateSet
 {
-    public record UpdateSetCommand(int planId, int day, int index, bool completed) : IRequest
+    public record UpdateSetCommand(int setId, bool completed) : IRequest
     {
     }
 }

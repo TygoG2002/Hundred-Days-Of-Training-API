@@ -1,4 +1,5 @@
-﻿using Application.Plans.GetDays;
+﻿using Application.Plans.GetDayProgress;
+using Application.Plans.GetDays;
 using Application.Plans.GetSets;
 using Application.Plans.UpdateSet;
 using HundredDays.Application.Plans.GetPlans;
@@ -48,12 +49,22 @@ public class PlansController : ControllerBase
     }
 
 
-    [HttpPost("{planId}/days/{day}/sets/{index}")]
-    public async Task<IActionResult> UpdateSet(int planId ,int day ,int index , [FromBody] bool completed)
+    [HttpPost("sets/{setId}")]
+    public async Task<IActionResult> UpdateSet(int setId, [FromBody] bool completed)
     {
-        await _mediator.Send(new UpdateSetCommand(planId, day, index, completed));
-
+        await _mediator.Send(new UpdateSetCommand(setId, completed));
         return NoContent();
+    }
+
+
+
+    [HttpGet("{planId}/days/{day}/progress")]
+    public async Task<IActionResult> GetDayProgress(int planId, int day)
+    {
+        var result = await _mediator.Send(
+            new GetDayProgressQuery(planId, day));
+
+        return Ok(result);
     }
 
 }

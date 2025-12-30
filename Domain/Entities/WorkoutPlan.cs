@@ -8,6 +8,8 @@ public class WorkoutPlan
     public string Name { get; private set; }
     public int TotalDays { get; private set; }
 
+    public string Description { get; private set; }
+
     public IReadOnlyCollection<WorkoutDay> Days => _days.AsReadOnly();
 
     private WorkoutPlan() { }

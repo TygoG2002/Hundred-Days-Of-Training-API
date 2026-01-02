@@ -5,5 +5,5 @@
 public class HealthController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Health() => Ok("Healthy");
+    public IActionResult Health() => Ok("Api is Healthy");
 }

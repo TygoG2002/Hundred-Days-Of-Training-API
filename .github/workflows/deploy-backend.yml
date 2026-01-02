@@ -1,0 +1,42 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Publish
+        run: dotnet publish -c Release -o publish
+
+      - name: Copy files to Pi
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: pi4tygo.tail70addb.ts.net
+          username: tygo
+          key: ${{ secrets.PI_SSH_KEY }}
+          source: "publish/*"
+          target: "/home/tygo/apps/hundreddays/backend/artifacts"
+
+      - name: Activate new version
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: pi4tygo.tail70addb.ts.net
+          username: tygo
+          key: ${{ secrets.PI_SSH_KEY }}
+          script: |
+            sudo systemctl stop hundreddays-api
+            rm -rf /home/tygo/apps/hundreddays/backend/publish/*
+            mv /home/tygo/apps/hundreddays/backend/artifacts/* /home/tygo/apps/hundreddays/backend/publish/
+            sudo systemctl start hundreddays-api

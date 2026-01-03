@@ -1,4 +1,4 @@
-﻿using Application.interfaces;
+﻿using Application.Days.Interfaces;
 using MediatR;
 
 namespace Application.Days.GetDayProgress;
@@ -6,16 +6,16 @@ namespace Application.Days.GetDayProgress;
 public class GetDayProgressHandler
     : IRequestHandler<GetDayProgressQuery, GetDayProgressResult>
 {
-    private readonly IWorkoutRepository _repository;
+    private readonly IDayProgressRepository _repository;
 
-    public GetDayProgressHandler(IWorkoutRepository repository)
+    public GetDayProgressHandler(IDayProgressRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<GetDayProgressResult> Handle(GetDayProgressQuery request, CancellationToken cancellationToken)
     {
-        var (done, total) = await _repository.GetDayProgress(
+        var (done, total) = await _repository.GetDayProgressAsync(
            request.PlanId,
            request.Day);
 

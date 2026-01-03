@@ -1,4 +1,4 @@
-﻿using Application.interfaces;
+﻿using Application.Plans.Interfaces;
 using HundredDays.Application.Plans.GetPlans;
 using HundredDays.Domain.Entities;
 using MediatR;
@@ -12,15 +12,15 @@ namespace Application.Plans.GetPlans
     public class GetPlansHandler : IRequestHandler<GetPlansQuery, List<WorkoutPlan>>
     {
 
-        private readonly IWorkoutRepository _workoutRepository;
+        private readonly IPlanQueryRepository _PlanQueryRepository;
 
-        public GetPlansHandler(IWorkoutRepository repo)
+        public GetPlansHandler(IPlanQueryRepository repo)
         {
-            _workoutRepository = repo; 
+            _PlanQueryRepository = repo; 
         }
         public async Task<List<WorkoutPlan>> Handle(GetPlansQuery request, CancellationToken cancellationToken)
         {
-           var result = await _workoutRepository.GetAllAsync();
+           var result = await _PlanQueryRepository.GetAllAsync();
             return result; 
         }
     }

@@ -1,4 +1,4 @@
-﻿using Application.interfaces;
+﻿using Application.Sets.Interfaces;
 using HundredDays.Domain.Entities;
 using MediatR;
 using System;
@@ -9,16 +9,16 @@ namespace Application.Sets.GetSets
 {
     public class GetSetsHandler : IRequestHandler<GetSetsQuery, List<WorkoutSet>>
     {
-        private readonly IWorkoutRepository _workoutRepository;
+        private readonly ISetQueryRepository _SetQueryRepository;
 
-        public GetSetsHandler(IWorkoutRepository repo)
+        public GetSetsHandler(ISetQueryRepository repo)
         {
-            _workoutRepository = repo;
+            _SetQueryRepository = repo;
         }
 
         public async Task<List<WorkoutSet>> Handle(GetSetsQuery request, CancellationToken cancellationToken)
         {
-            return await _workoutRepository.GetSets(request.PlanId, request.Day);
+            return await _SetQueryRepository.GetSetsAsync(request.PlanId, request.Day);
         }
     }
 }

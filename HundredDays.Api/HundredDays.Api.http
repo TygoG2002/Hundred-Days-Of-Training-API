@@ -1,6 +1,37 @@
-@HundredDays.Api_HostAddress = http://localhost:5254
+@baseUrl = http://localhost:5254
 
-GET {{HundredDays.Api_HostAddress}}/weatherforecast/
+
+# Get all plans
+# GET /api/plans
+
+GET {{baseUrl}}/api/plans
 Accept: application/json
 
-###
+
+# Get plans overview
+# GET /api/plans/overview
+
+GET {{baseUrl}}/api/plans/overview
+Accept: application/json
+
+
+# Get days for a plan
+# GET /api/plans/{planId}/days
+
+GET {{baseUrl}}/api/plans/1/days
+Accept: application/json
+
+
+# Get sets for a specific day
+# GET /api/plans/{planId}/days/{day}/sets
+
+GET {{baseUrl}}/api/plans/1/days/1/sets
+Accept: application/json
+
+
+# Get progress for a specific day
+# GET /api/plans/{planId}/days/{day}/progress
+
+GET {{baseUrl}}/api/plans/1/days/1/progress
+Accept: application/json
+

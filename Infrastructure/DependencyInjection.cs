@@ -1,4 +1,7 @@
-﻿using Application.interfaces;
+﻿using Application.Days.Interfaces;
+using Application.Plans.Interfaces;
+using Application.Sets.Interfaces;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,7 +30,13 @@ namespace Infrastructure
                 ServiceLifetime.Scoped 
             );
 
-            services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+
+            services.AddScoped<IPlanQueryRepository, WorkoutPlanRepository>();
+            services.AddScoped<IDayQueryRepository, WorkoutDayRepository>();
+            services.AddScoped<ISetQueryRepository, WorkoutSetRepository>();
+            services.AddScoped<ISetCommandRepository, WorkoutSetRepository>();
+            services.AddScoped<IDayProgressRepository, WorkoutProgressRepository>();
+
 
             return services;
         }

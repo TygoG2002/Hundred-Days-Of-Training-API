@@ -1,4 +1,4 @@
-﻿using Application.interfaces;
+﻿using Application.Sets.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,17 +8,17 @@ namespace Application.Sets.UpdateSet
 {
     public class UpdateSetHandler : IRequestHandler<UpdateSetCommand>
     {
-        private readonly IWorkoutRepository _workoutRepository;
+        private readonly ISetCommandRepository _SetCommandRepository;
 
-        public UpdateSetHandler(IWorkoutRepository repo)
+        public UpdateSetHandler(ISetCommandRepository repo)
         {
-            _workoutRepository = repo; 
+            _SetCommandRepository = repo; 
         }
 
 
         public async Task Handle(UpdateSetCommand request, CancellationToken cancellationToken)
         {
-             await _workoutRepository.UpdateSet(request.setId, request.completed);
+             await _SetCommandRepository.UpdateSetAsync(request.setId, request.completed);
            
         }
     }

@@ -1,4 +1,4 @@
-﻿using Application.interfaces;
+﻿using Application.Days.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,17 +9,17 @@ namespace Application.Days.GetDays
     public class GetDaysHandler
        : IRequestHandler<GetDaysQuery, List<int>>
     {
-        private readonly IWorkoutRepository _workoutRepository;
+        private readonly IDayQueryRepository _DayQueryRepository;
 
 
-        public GetDaysHandler(IWorkoutRepository repo)
+        public GetDaysHandler(IDayQueryRepository repo)
         {
-            _workoutRepository = repo;
+            _DayQueryRepository = repo;
         }
 
         public async Task<List<int>> Handle(GetDaysQuery request, CancellationToken cancellationToken)
         {
-            return await _workoutRepository.GetDays(request.planId);
+            return await _DayQueryRepository.GetDaysAsync(request.planId);
 
         }
     }

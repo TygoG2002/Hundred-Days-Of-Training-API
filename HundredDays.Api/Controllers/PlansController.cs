@@ -31,7 +31,7 @@ public class PlansController : ControllerBase
 
 
     [HttpGet("overview")]
-    public async Task<IActionResult> GetOverview()
+    public async Task<IActionResult> GetPlansOverview()
     {
         var result = await _mediator.Send(new GetPlansOverviewQuery());
         return Ok(result);

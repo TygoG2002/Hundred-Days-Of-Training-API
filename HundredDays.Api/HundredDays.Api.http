@@ -1,37 +1,28 @@
 @baseUrl = http://localhost:5254
 
 
-# Get all plans
-# GET /api/plans
-
+### Get all plans
 GET {{baseUrl}}/api/plans
 Accept: application/json
 
 
-# Get plans overview
-# GET /api/plans/overview
-
+### Get plans overview 
 GET {{baseUrl}}/api/plans/overview
 Accept: application/json
 
 
-# Get days for a plan
-# GET /api/plans/{planId}/days
-
-GET {{baseUrl}}/api/plans/1/days
+### Get days for a plan
+@planId = 1
+GET {{baseUrl}}/api/plans/{{planId}}/days
 Accept: application/json
 
 
-# Get sets for a specific day
-# GET /api/plans/{planId}/days/{day}/sets
-
-GET {{baseUrl}}/api/plans/1/days/1/sets
+### Get sets for a specific day
+@day = 1
+GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/sets
 Accept: application/json
 
 
-# Get progress for a specific day
-# GET /api/plans/{planId}/days/{day}/progress
-
-GET {{baseUrl}}/api/plans/1/days/1/progress
+### Get progress for a specific day
+GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/progress
 Accept: application/json
-

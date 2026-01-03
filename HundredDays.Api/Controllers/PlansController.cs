@@ -1,8 +1,8 @@
-﻿using Application.Plans.GetDayProgress;
-using Application.Plans.GetDays;
+﻿using Application.Days.GetDayProgress;
+using Application.Days.GetDays;
 using Application.Plans.GetPlansOverview;
-using Application.Plans.UpdateSet;
 using Application.Sets.GetSets;
+using Application.Sets.UpdateSet;
 using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Plans.UpdateSet
+namespace Application.Sets.UpdateSet
 {
     public class UpdateSetHandler : IRequestHandler<UpdateSetCommand>
     {

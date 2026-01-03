@@ -1,7 +1,8 @@
 ﻿using Application.Plans.GetDayProgress;
 using Application.Plans.GetDays;
-using Application.Plans.GetSets;
+using Application.Plans.GetPlansOverview;
 using Application.Plans.UpdateSet;
+using Application.Sets.GetSets;
 using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,16 @@ public class PlansController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+
+
+    [HttpGet("overview")]
+    public async Task<IActionResult> GetOverview()
+    {
+        var result = await _mediator.Send(new GetPlansOverviewQuery());
+        return Ok(result);
+    }
+
+
 
 
     // GET /api/plans/{planId}/days

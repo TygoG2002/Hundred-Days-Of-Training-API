@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Plans.GetSets
+namespace Application.Sets.GetSets
 {
     public record GetSetsQuery(int PlanId, int Day)
         : IRequest<List<WorkoutSet>>;

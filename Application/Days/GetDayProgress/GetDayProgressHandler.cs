@@ -1,7 +1,7 @@
 ﻿using Application.interfaces;
 using MediatR;
 
-namespace Application.Plans.GetDayProgress;
+namespace Application.Days.GetDayProgress;
 
 public class GetDayProgressHandler
     : IRequestHandler<GetDayProgressQuery, GetDayProgressResult>

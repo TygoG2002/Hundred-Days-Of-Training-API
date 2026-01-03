@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Plans.GetDays
+namespace Application.Days.GetDays
 {
     public record GetDaysQuery(int planId) : IRequest<List<int>>;
 

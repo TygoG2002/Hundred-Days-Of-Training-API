@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Plans.GetSets
+namespace Application.Sets.GetSets
 {
     public class GetSetsHandler : IRequestHandler<GetSetsQuery, List<WorkoutSet>>
     {

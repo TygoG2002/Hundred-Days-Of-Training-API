@@ -1,17 +1,77 @@
 # Hundred Days Of Training API
 
-Backend API for the **Hundred Days Of Training** workout application.  
-This API powers a progressive workout program where users complete daily sets over a 100-day period.
+This repository contains the **backend API** for the *Hundred Days Of Training* workout application.
 
-The API is built with **ASP.NET Core**, follows **Clean Architecture** principles, and runs on a **Linux server (Raspberry Pi)**.
+I built this project both as a **portfolio project** and for **personal use**.  
+I enjoy strength training and wanted a system that clearly shows my long-term progression — especially for **weighted pull-ups and push-ups**.
 
-This API is **not publicly exposed** and is used for **personal use only**, accessible through a **private Tailscale network**.
+The API powers a structured 100-day workout program where daily sets are completed, tracked, and evaluated over time, making progression measurable across an entire training cycle.
 
-## Features
+---
 
-- Workout plans with daily progression
-- Day-based workout structure
-- Set completion tracking
-- Progress calculation per day and per plan
-- Aggregated endpoints to reduce API calls
-- Designed for PWA / mobile usage and web browser
+## Role within the system
+
+This API is one component of a **private end-to-end system**:
+
+- A frontend (PWA / web application) is used on my phone and laptop
+- The frontend communicates with this backend API
+- Both run on a **Raspberry Pi Linux server**
+- Access is restricted to a **private Tailscale network**
+
+The API is **not publicly exposed** and is intended for **personal use only**.
+
+---
+
+## System architecture
+
+The diagram below shows how the API fits into the overall system.
+
+- Client devices connect through **Tailscale**
+- Requests are routed via **Nginx**
+- The ASP.NET Core API handles business logic
+- The database is accessible only by the API
+
+All communication happens inside a private network.
+
+<img width="1536" height="1024" alt="System architecture diagram" src="https://github.com/user-attachments/assets/b0e07a44-603a-47ac-b9c2-f5cb6d4f3a42" />
+
+---
+
+## Architecture
+
+The API is built with **ASP.NET Core** and follows **Clean Architecture** principles:
+
+- Clear separation between domain, application, and infrastructure layers
+- CQRS-style queries and commands
+- Focus on maintainability, testability, and long-term scalability
+
+The API runs locally on the server and is accessed through a reverse proxy.
+
+---
+
+## Security & Access
+
+- The API is **not accessible via the public internet**
+- Access is limited to trusted devices via **Tailscale**
+- The database is accessible **only** by this API
+
+Security is handled at the **network level**, which is sufficient for personal use.
+
+---
+
+## Tech stack
+
+- **ASP.NET Core / .NET**
+- **C#**
+- **Clean Architecture**
+- **CQRS / MediatR**
+- **MariaDB**
+- **Linux (Raspberry Pi)**
+- **Tailscale (private networking)**
+
+---
+
+## Notes
+
+This repository contains **only the backend API**.  
+The frontend and infrastructure configuration are maintained in a separate repository.

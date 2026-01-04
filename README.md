@@ -3,9 +3,9 @@
 This repository contains the **backend API** for the *Hundred Days Of Training* workout application.
 
 I built this project both as a **portfolio project** and for **personal use**.  
-I enjoy strength training and wanted a system that clearly shows my long-term progression — especially for **weighted pull-ups and push-ups**.
+I enjoy strength training and wanted a system that clearly shows my long-term progression. especially for **weighted pull-ups and push-ups**.
 
-The API powers a structured 100-day workout program where daily sets are completed, tracked, and evaluated over time, making progression measurable across an entire training cycle.
+The API powers a couple structured 100-day workout program where daily sets are completed, tracked, and evaluated over time, making progression measurable. 
 
 ---
 

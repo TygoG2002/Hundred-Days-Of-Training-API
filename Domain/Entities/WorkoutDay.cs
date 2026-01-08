@@ -9,6 +9,9 @@ public class WorkoutDay
 
     public int WorkoutPlanId { get; private set; }
     public WorkoutPlan Plan { get; private set; } = null!;
+    public DateTime? CompletedAt { get; private set; }
+
+    public bool Completed { get; private set; }
 
     public IReadOnlyCollection<WorkoutSet> Sets => _sets.AsReadOnly();
 
@@ -24,5 +27,11 @@ public class WorkoutDay
             throw new ArgumentOutOfRangeException(nameof(reps));
 
         _sets.Add(new WorkoutSet(reps));
+    }
+
+
+    public static bool CompleteCurrentWorkout(WorkoutDay day)
+    {
+        return day.Completed = true;
     }
 }

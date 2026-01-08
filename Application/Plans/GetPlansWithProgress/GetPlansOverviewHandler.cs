@@ -9,13 +9,11 @@ public class GetPlansOverviewHandler : IRequestHandler<GetPlansOverviewQuery, Li
 {
     private readonly IPlanQueryRepository _plans;
     private readonly IDayQueryRepository _days;
-    private readonly IDayProgressRepository _progress;
 
-    public GetPlansOverviewHandler(IPlanQueryRepository plans, IDayQueryRepository days, IDayProgressRepository progress)
+    public GetPlansOverviewHandler(IPlanQueryRepository plans, IDayQueryRepository days, IDayQueryRepository progress)
     {
         _plans = plans;
         _days = days;
-        _progress = progress;
     }
 
     public async Task<List<PlanOverviewDto>> Handle(GetPlansOverviewQuery request, CancellationToken cancellationToken)
@@ -32,7 +30,7 @@ public class GetPlansOverviewHandler : IRequestHandler<GetPlansOverviewQuery, Li
             foreach (var day in days)
             {
                 var (done, total) =
-                    await _progress.GetDayProgressAsync(plan.Id, day);
+                    await _days.GetDayProgressAsync(plan.Id, day);
 
                 if (total > 0 && done == total)
                     completed++;

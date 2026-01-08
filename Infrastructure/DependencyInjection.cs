@@ -1,4 +1,5 @@
 ﻿using Application.Days.Interfaces;
+using Application.interfaces;
 using Application.Plans.Interfaces;
 using Application.Sets.Interfaces;
 using Infrastructure.Repositories;
@@ -35,8 +36,7 @@ namespace Infrastructure
             services.AddScoped<IDayQueryRepository, WorkoutDayRepository>();
             services.AddScoped<ISetQueryRepository, WorkoutSetRepository>();
             services.AddScoped<ISetCommandRepository, WorkoutSetRepository>();
-            services.AddScoped<IDayProgressRepository, WorkoutProgressRepository>();
-
+            services.AddScoped<IDayCommandRepository, WorkoutDayRepository>();
 
             return services;
         }

@@ -15,6 +15,8 @@ namespace Infrastructure.Repositories
 
         public async Task<List<PlanOverviewDto>> GetTodayWorkouts()
         {
+            var today = DateTime.UtcNow.Date;
+
             var days = await _db.WorkoutDays
                 .Include(d => d.Plan)
                 .ToListAsync();
@@ -25,11 +27,22 @@ namespace Infrastructure.Repositories
                 {
                     var plan = group.First().Plan;
 
+                    var nextDay = group
+                        .OrderBy(d => d.DayNumber)
+                        .FirstOrDefault(d => d.CompletedAt == null);
+
+                    if (nextDay == null)
+                        return null; 
+
+                    var doneToday = group.Any(d =>
+                        d.CompletedAt != null &&
+                        d.CompletedAt.Value.Date == today);
+
+                    if (doneToday)
+                        return null;
+
                     var completedDays = group.Count(d => d.CompletedAt != null);
                     var totalDays = group.Count();
-
-                    if (completedDays >= totalDays)
-                        return null;
 
                     return new PlanOverviewDto(
                         plan.Id,
@@ -41,5 +54,6 @@ namespace Infrastructure.Repositories
                 .Where(x => x != null)
                 .ToList()!;
         }
+
     }
 }

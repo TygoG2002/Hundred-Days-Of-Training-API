@@ -13,18 +13,12 @@ Accept: application/json
 
 ### Get days for a plan
 @planId = 1
-GET {{baseUrl}}/api/plans/{{planId}}/days
-Accept: application/json
-
-
-### Get sets for a specific day
-@day = 1
-GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/sets
+GET {{baseUrl}}/api/days/{{planId}}/days
 Accept: application/json
 
 
 ### Get progress for a specific day
-GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/progress
+GET {{baseUrl}}/api/days/{{planId}}/days/{{day}}/progress
 Accept: application/json
 
 
@@ -33,7 +27,7 @@ POST {{baseUrl}}/api/days/Completed
 Content-Type: application/json
 
 {
-  "planId": 1,
-  "dayId": 2,
-  "completed": true
+  "planId": 2,
+  "dayId": 3,
+  "completed": false
 }

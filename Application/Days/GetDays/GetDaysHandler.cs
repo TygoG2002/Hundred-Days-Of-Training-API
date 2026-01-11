@@ -7,7 +7,7 @@ using System.Text;
 namespace Application.Days.GetDays
 {
     public class GetDaysHandler
-       : IRequestHandler<GetDaysQuery, List<int>>
+       : IRequestHandler<GetDaysQuery, List<DayOverviewDto>>
     {
         private readonly IDayQueryRepository _DayQueryRepository;
 
@@ -17,7 +17,7 @@ namespace Application.Days.GetDays
             _DayQueryRepository = repo;
         }
 
-        public async Task<List<int>> Handle(GetDaysQuery request, CancellationToken cancellationToken)
+        public async Task<List<DayOverviewDto>> Handle(GetDaysQuery request, CancellationToken cancellationToken)
         {
             return await _DayQueryRepository.GetDaysAsync(request.planId);
 

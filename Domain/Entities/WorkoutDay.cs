@@ -30,8 +30,8 @@ public class WorkoutDay
     }
 
 
-    public static bool CompleteCurrentWorkout(WorkoutDay day)
+    public static bool CompleteCurrentWorkout(WorkoutDay day, bool completed)
     {
-        return day.Completed = true;
+        return day.Completed = completed;
     }
 }

@@ -1,12 +1,13 @@
-﻿using Application.Days.Interfaces;
+﻿using Application.Days.GetDays;
+using Application.Days.Interfaces;
 using Application.interfaces;
+using HundredDays.Domain.Entities; 
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HundredDays.Domain.Entities; 
 
 namespace Infrastructure.Repositories
 {
@@ -19,13 +20,19 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<List<int>> GetDaysAsync(int planId)
+        public async Task<List<DayOverviewDto>> GetDaysAsync(int planId)
         {
             return await _db.WorkoutDays
                 .Where(d => d.WorkoutPlanId == planId)
-                .Select(d => d.DayNumber)
+                .OrderBy(d => d.DayNumber)
+                .Select(d => new DayOverviewDto
+                {
+                    DayId = d.DayNumber,
+                    IsCompleted = d.Completed
+                })
                 .ToListAsync();
         }
+
 
         public async Task<(int done, int total)> GetDayProgressAsync(int planId, int day)
         {
@@ -48,7 +55,7 @@ namespace Infrastructure.Repositories
 
            
 
-            WorkoutDay.CompleteCurrentWorkout(currentDay!);
+            WorkoutDay.CompleteCurrentWorkout(currentDay!, completed);
             await _db.SaveChangesAsync();
 
 

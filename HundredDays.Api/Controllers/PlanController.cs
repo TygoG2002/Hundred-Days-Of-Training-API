@@ -2,7 +2,6 @@
 using Application.Days.GetDays;
 using Application.Plans.GetPlansOverview;
 using Application.Sets.GetSets;
-using Application.Sets.UpdateSet;
 using HundredDays.Application.Plans.GetPlans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

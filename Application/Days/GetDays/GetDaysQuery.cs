@@ -6,6 +6,6 @@ using System.Text;
 
 namespace Application.Days.GetDays
 {
-    public record GetDaysQuery(int planId) : IRequest<List<int>>;
+    public record GetDaysQuery(int planId) : IRequest<List<DayOverviewDto>>;
 
 }

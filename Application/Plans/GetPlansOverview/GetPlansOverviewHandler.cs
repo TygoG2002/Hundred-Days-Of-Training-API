@@ -25,17 +25,14 @@ public class GetPlansOverviewHandler : IRequestHandler<GetPlansOverviewQuery, Li
         {
             var days = await _days.GetDaysAsync(plan.Id);
 
-            int completed = 0;
 
+            int completed = 0; 
             foreach (var day in days)
             {
-                var (done, total) =
-                    await _days.GetDayProgressAsync(plan.Id, day);
-
-                if (total > 0 && done == total)
+                if (day.IsCompleted)
                     completed++;
             }
-
+            
             result.Add(new PlanOverviewDto(
                 plan.Id,
                 plan.Name,

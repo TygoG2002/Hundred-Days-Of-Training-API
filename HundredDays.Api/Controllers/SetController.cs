@@ -1,5 +1,4 @@
 ﻿using Application.Sets.GetSets;
-using Application.Sets.UpdateSet;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,14 +25,5 @@ namespace HundredDays.Api.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
-
-        // GET /api/sets/sets/{setId}
-        [HttpPost("sets/{setId}")]
-        public async Task<IActionResult> UpdateSet(int setId, [FromBody] bool completed)
-        {
-            await _mediator.Send(new UpdateSetCommand(setId, completed));
-            return NoContent();
-        }
-
     }
 }

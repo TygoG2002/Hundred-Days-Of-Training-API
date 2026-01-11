@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<PlanOverviewDto>> GetTodayWorkouts()
         {
-            var today = DateTime.UtcNow.Date;
+            var today = DateTime.Now.Date;
 
             var days = await _db.WorkoutDays
                 .Include(d => d.Plan)

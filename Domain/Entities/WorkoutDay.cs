@@ -32,6 +32,8 @@ public class WorkoutDay
 
     public static bool CompleteCurrentWorkout(WorkoutDay day, bool completed)
     {
+        day.CompletedAt = DateTime.Today;
         return day.Completed = completed;
+
     }
 }

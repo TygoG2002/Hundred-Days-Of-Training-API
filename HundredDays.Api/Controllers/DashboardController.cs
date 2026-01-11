@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Dashboard.GetTodaysWorkouts;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -15,7 +16,7 @@ public class DashboardController : ControllerBase
     [HttpGet("today")]
     public async Task<IActionResult> GetTodayWorkouts()
     {
-       
-        return Ok();
+        var result = await _mediator.Send(new GetTodayWorkoutsQuery());
+        return Ok(result);
     }
 }

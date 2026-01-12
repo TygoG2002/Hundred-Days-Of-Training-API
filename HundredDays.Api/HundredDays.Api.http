@@ -1,28 +1,37 @@
 @baseUrl = http://localhost:5254
 
-
 ### Get all plans
 GET {{baseUrl}}/api/plans
 Accept: application/json
 
 
-### Get plans overview 
+### Get plans overview
 GET {{baseUrl}}/api/plans/overview
 Accept: application/json
 
 
 ### Get days for a plan
 @planId = 1
-GET {{baseUrl}}/api/plans/{{planId}}/days
-Accept: application/json
-
-
-### Get sets for a specific day
-@day = 1
-GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/sets
+GET {{baseUrl}}/api/days/{{planId}}/days
 Accept: application/json
 
 
 ### Get progress for a specific day
-GET {{baseUrl}}/api/plans/{{planId}}/days/{{day}}/progress
+@day = 1
+GET {{baseUrl}}/api/days/{{planId}}/days/{{day}}/progress
+Accept: application/json
+
+
+### Complete a day
+POST {{baseUrl}}/api/days/completed
+Content-Type: application/json
+
+{
+  "planId": 2,
+  "dayId": 3,
+  "completed": true
+}
+
+### Get today's workouts 
+GET {{baseUrl}}/api/dashboard/today
 Accept: application/json

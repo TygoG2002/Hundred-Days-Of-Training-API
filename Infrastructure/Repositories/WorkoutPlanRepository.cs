@@ -1,4 +1,5 @@
-﻿using Application.Plans.Interfaces;
+﻿using Application.Plans.GetPlansWithProgress;
+using Application.Plans.Interfaces;
 using HundredDays.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,4 +18,17 @@ public class WorkoutPlanRepository : IPlanQueryRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<List<PlanOverviewDto>> GetPlansOverviewAsync()
+    {
+        return await _db.WorkoutPlans
+            .Select(p => new PlanOverviewDto(
+                p.Id,
+                p.Name,
+                p.Days.Count(d => d.Completed),
+                p.Days.Count()
+            ))
+            .ToListAsync();
+    }
+
 }

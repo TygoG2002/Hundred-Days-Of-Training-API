@@ -16,13 +16,13 @@ namespace Application.Plans.GetPlans
 
         public GetPlansHandler(IPlanQueryRepository repo)
         {
-            _PlanQueryRepository = repo; 
+            _PlanQueryRepository = repo;
         }
         public async Task<List<WorkoutPlan>> Handle(GetPlansQuery request, CancellationToken cancellationToken)
         {
-           var result = await _PlanQueryRepository.GetAllAsync();
-            return result; 
+            var result = await _PlanQueryRepository.GetAllAsync();
+            return result;
         }
     }
- 
+
 }

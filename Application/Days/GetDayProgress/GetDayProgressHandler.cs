@@ -6,9 +6,9 @@ namespace Application.Days.GetDayProgress;
 public class GetDayProgressHandler
     : IRequestHandler<GetDayProgressQuery, GetDayProgressResult>
 {
-    private readonly IDayProgressRepository _repository;
+    private readonly IDayQueryRepository _repository;
 
-    public GetDayProgressHandler(IDayProgressRepository repository)
+    public GetDayProgressHandler(IDayQueryRepository repository)
     {
         _repository = repository;
     }

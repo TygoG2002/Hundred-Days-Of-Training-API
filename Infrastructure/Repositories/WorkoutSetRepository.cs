@@ -2,7 +2,7 @@
 using HundredDays.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class WorkoutSetRepository : ISetCommandRepository, ISetQueryRepository
+public class WorkoutSetRepository : ISetQueryRepository
 {
     private readonly AppDbContext _db;
 
@@ -18,12 +18,5 @@ public class WorkoutSetRepository : ISetCommandRepository, ISetQueryRepository
             .SelectMany(d => d.Sets)
             .AsNoTracking()
             .ToListAsync();
-    }
-
-    public async Task UpdateSetAsync(int setId, bool completed)
-    {
-        var set = await _db.WorkoutSets.FirstAsync(s => s.Id == setId);
-        set.MarkCompleted(completed);
-        await _db.SaveChangesAsync();
     }
 }

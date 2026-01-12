@@ -28,7 +28,8 @@ namespace Infrastructure.Repositories
                 .Select(d => new DayOverviewDto
                 {
                     DayId = d.DayNumber,
-                    IsCompleted = d.Completed
+                    IsCompleted = d.Completed,
+                    CompletedAt = d.CompletedAt
                 })
                 .ToListAsync();
         }

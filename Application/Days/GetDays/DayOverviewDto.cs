@@ -10,6 +10,8 @@ namespace Application.Days.GetDays
     {
         public int DayId { get; set; }
         public bool IsCompleted { get; set; }
+
+        public DateTime? CompletedAt { get; set; }
     }
 
 }

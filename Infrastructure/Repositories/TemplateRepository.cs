@@ -15,9 +15,9 @@ namespace Infrastructure.Repositories
 
         public async Task<List<WorkoutTemplateDto>> GetTemplatesAsync()
         {
-            return await _db.WorkoutTemplate
+            return await _db.WorkoutTemplates
                 .AsNoTracking()
-                .Include(t => t.Exercises)
+                .Include(t => t.Exercises) // ✅ JUIST
                 .Select(t => new WorkoutTemplateDto
                 {
                     Id = t.Id,
@@ -33,5 +33,7 @@ namespace Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+
+
     }
 }

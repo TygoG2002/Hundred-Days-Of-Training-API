@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260108192902_compledte_day_added")]
-    partial class compledte_day_added
+    [Migration("20260113133843_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,78 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Entities.Template.TemplateExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Reps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sets")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkoutTemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutTemplateId");
+
+                    b.ToTable("TemplateExercise", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkoutTemplate", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkoutTemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutTemplateId");
+
+                    b.ToTable("WorkoutTemplateScheduledDay", (string)null);
+                });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>
                 {
@@ -99,6 +171,22 @@ namespace Infrastructure.Migrations
                     b.ToTable("WorkoutSets");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Template.TemplateExercise", b =>
+                {
+                    b.HasOne("Domain.Entities.Template.WorkoutTemplate", null)
+                        .WithMany("Exercises")
+                        .HasForeignKey("WorkoutTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
+                {
+                    b.HasOne("Domain.Entities.Template.WorkoutTemplate", null)
+                        .WithMany("ScheduledDays")
+                        .HasForeignKey("WorkoutTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>
                 {
                     b.HasOne("HundredDays.Domain.Entities.WorkoutPlan", "Plan")
@@ -119,6 +207,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Day");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplate", b =>
+                {
+                    b.Navigation("Exercises");
+
+                    b.Navigation("ScheduledDays");
                 });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>

@@ -13,6 +13,9 @@ namespace Domain.Entities.Template
 
         private WorkoutTemplateScheduledDay() { } 
 
+
+
+
         public WorkoutTemplateScheduledDay(DayOfWeek dayOfWeek)
         {
             DayOfWeek = dayOfWeek;

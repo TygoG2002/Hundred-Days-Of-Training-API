@@ -49,7 +49,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTemplateId");
 
-                    b.ToTable("TemplateExercise");
+                    b.ToTable("TemplateExercise", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplate", b =>
@@ -69,7 +69,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutTemplate");
+                    b.ToTable("WorkoutTemplate", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
@@ -90,7 +90,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WorkoutTemplateId");
 
-                    b.ToTable("WorkoutTemplateScheduledDay");
+                    b.ToTable("WorkoutTemplateScheduledDay", (string)null);
                 });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>
@@ -172,14 +172,16 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Template.WorkoutTemplate", null)
                         .WithMany("Exercises")
-                        .HasForeignKey("WorkoutTemplateId");
+                        .HasForeignKey("WorkoutTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
                 {
                     b.HasOne("Domain.Entities.Template.WorkoutTemplate", null)
                         .WithMany("ScheduledDays")
-                        .HasForeignKey("WorkoutTemplateId");
+                        .HasForeignKey("WorkoutTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>

@@ -37,6 +37,9 @@ namespace Infrastructure
             services.AddScoped<ISetQueryRepository, WorkoutSetRepository>();
             services.AddScoped<IDayCommandRepository, WorkoutDayRepository>();
             services.AddScoped<IDashboardQueryRepository, DashboardRepository>();
+            services.AddScoped<ITemplateQueryRepository, TemplateRepository>();
+
+
             return services;
         }
     }

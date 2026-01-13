@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Application.Template.GetTemplates
 {
-    public class WorkoutTemplateDto
+    public class TemplateExerciseDto
     {
-        public int Id { get; set; }
         public string Name { get; set; } = "";
-        public string? Description { get; set; }
-
-        public List<TemplateExerciseDto> Exercises { get; set; } = new();
+        public int Sets { get; set; }
+        public int Reps { get; set; }
+        public int RestSeconds { get; set; }
     }
 
 }

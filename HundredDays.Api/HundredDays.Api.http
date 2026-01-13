@@ -35,3 +35,8 @@ Content-Type: application/json
 ### Get today's workouts 
 GET {{baseUrl}}/api/dashboard/today
 Accept: application/json
+
+
+###
+GET {{baseUrl}}/api/Templates
+Accept: application/json

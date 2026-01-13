@@ -1,4 +1,6 @@
 ﻿using Domain.Entities.Template;
+using Domain.Entities.WorkoutSession;
+using Domain.Entities.WorkoutSession.Domain.Entities.WorkoutSession;
 using HundredDays.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,10 @@ public class AppDbContext : DbContext
     public DbSet<TemplateExercise> TemplateExercises => Set<TemplateExercise>();
     public DbSet<WorkoutTemplateScheduledDay> WorkoutTemplateScheduledDays => Set<WorkoutTemplateScheduledDay>();
 
+    public DbSet<WorkoutSession> WorkoutSessions => Set<WorkoutSession>();
+    public DbSet<WorkoutSessionExercise> WorkoutSessionExercises => Set<WorkoutSessionExercise>();
+    public DbSet<WorkoutSessionSet> WorkoutSessionSets => Set<WorkoutSessionSet>();
+
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -21,9 +27,6 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // -------------------------
-        // WorkoutTemplate
-        // -------------------------
         modelBuilder.Entity<WorkoutTemplate>(b =>
         {
             b.ToTable("WorkoutTemplate");
@@ -32,7 +35,6 @@ public class AppDbContext : DbContext
             b.Property(x => x.Name).IsRequired();
             b.Property(x => x.Description);
 
-            // Exercises (backing field: _exercises)
             b.HasMany(x => x.Exercises)
                 .WithOne()
                 .HasForeignKey("WorkoutTemplateId")
@@ -42,7 +44,6 @@ public class AppDbContext : DbContext
                 .HasField("_exercises")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-            // ScheduledDays (backing field: _scheduledDays)
             b.HasMany(x => x.ScheduledDays)
                 .WithOne()
                 .HasForeignKey("WorkoutTemplateId")
@@ -53,9 +54,6 @@ public class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
-        // -------------------------
-        // TemplateExercise
-        // -------------------------
         modelBuilder.Entity<TemplateExercise>(b =>
         {
             b.ToTable("TemplateExercise");
@@ -67,9 +65,6 @@ public class AppDbContext : DbContext
             b.Property(x => x.RestSeconds).IsRequired();
         });
 
-        // -------------------------
-        // WorkoutTemplateScheduledDay
-        // -------------------------
         modelBuilder.Entity<WorkoutTemplateScheduledDay>(b =>
         {
             b.ToTable("WorkoutTemplateScheduledDay");
@@ -78,6 +73,50 @@ public class AppDbContext : DbContext
             b.Property(x => x.DayOfWeek)
                 .IsRequired()
                 .HasConversion<int>();
+        });
+
+        modelBuilder.Entity<WorkoutSession>(b =>
+        {
+            b.ToTable("WorkoutSession");
+            b.HasKey(x => x.Id);
+
+            b.Property(x => x.StartedAt).IsRequired();
+            b.Property(x => x.FinishedAt);
+
+            b.HasOne(x => x.WorkoutTemplate)
+                .WithMany()
+                .HasForeignKey(x => x.WorkoutTemplateId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<WorkoutSessionExercise>(b =>
+        {
+            b.ToTable("WorkoutSessionExercise");
+            b.HasKey(x => x.Id);
+
+            b.Property(x => x.Name).IsRequired();
+            b.Property(x => x.TargetSets).IsRequired();
+            b.Property(x => x.TargetReps).IsRequired();
+            b.Property(x => x.RestSeconds).IsRequired();
+
+            b.HasMany(x => x.Sets)
+                .WithOne()
+                .HasForeignKey(x => x.WorkoutSessionExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.Navigation(x => x.Sets)
+                .HasField("_sets")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
+        });
+
+        modelBuilder.Entity<WorkoutSessionSet>(b =>
+        {
+            b.ToTable("WorkoutSessionSet");
+            b.HasKey(x => x.Id);
+
+            b.Property(x => x.SetNumber).IsRequired();
+            b.Property(x => x.Reps);
+            b.Property(x => x.WeightKg);
         });
     }
 }

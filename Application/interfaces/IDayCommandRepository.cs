@@ -8,6 +8,6 @@ namespace Application.interfaces
 {
     public interface IDayCommandRepository
     {
-        Task completeDay(int planId, int dayId, bool completed); 
+        Task CompleteDayAsync(int planId, int dayId, bool completed); 
     }
 }

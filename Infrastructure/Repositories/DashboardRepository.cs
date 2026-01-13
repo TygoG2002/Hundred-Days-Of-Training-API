@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<List<PlanOverviewDto>> GetTodayWorkouts()
+        public async Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync()
         {
             var today = DateTime.Now.Date;
 

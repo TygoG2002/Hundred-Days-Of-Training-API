@@ -11,7 +11,11 @@ namespace Domain.Entities.Template
         public int Id { get; private set; }
         public string Name { get; private set; } = "";
         public string? Description { get; private set; }
-        public int EstimatedDurationMinutes { get; private set; }
+
+
+        private readonly List<WorkoutTemplateScheduledDay> _scheduledDays = new();
+        public IReadOnlyCollection<WorkoutTemplateScheduledDay> ScheduledDays => _scheduledDays;
+
 
         private readonly List<TemplateExercise> _exercises = new();
         public IReadOnlyCollection<TemplateExercise> Exercises => _exercises;
@@ -21,7 +25,6 @@ namespace Domain.Entities.Template
         public WorkoutTemplate(string name, int estimatedDurationMinutes, string? description = null)
         {
             Name = name;
-            EstimatedDurationMinutes = estimatedDurationMinutes;
             Description = description;
         }
 

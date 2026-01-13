@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260113113245_days-of-week-added")]
+    partial class daysofweekadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,27 +73,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkoutTemplate");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkoutTemplateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WorkoutTemplateId");
-
-                    b.ToTable("WorkoutTemplateScheduledDay");
                 });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>
@@ -175,13 +157,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("WorkoutTemplateId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplateScheduledDay", b =>
-                {
-                    b.HasOne("Domain.Entities.Template.WorkoutTemplate", null)
-                        .WithMany("ScheduledDays")
-                        .HasForeignKey("WorkoutTemplateId");
-                });
-
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>
                 {
                     b.HasOne("HundredDays.Domain.Entities.WorkoutPlan", "Plan")
@@ -207,8 +182,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Template.WorkoutTemplate", b =>
                 {
                     b.Navigation("Exercises");
-
-                    b.Navigation("ScheduledDays");
                 });
 
             modelBuilder.Entity("HundredDays.Domain.Entities.WorkoutDay", b =>

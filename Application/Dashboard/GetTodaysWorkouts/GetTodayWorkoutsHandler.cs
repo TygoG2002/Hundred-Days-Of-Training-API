@@ -21,7 +21,7 @@ namespace Application.Dashboard.GetTodaysWorkouts
 
         public async Task<List<PlanOverviewDto>> Handle(GetTodayWorkoutsQuery request, CancellationToken cancellationToken)
         {
-            return await _dashboardRepository.GetTodayWorkouts();
+            return await _dashboardRepository.GetTodayWorkoutsAsync();
         }
     }
 }

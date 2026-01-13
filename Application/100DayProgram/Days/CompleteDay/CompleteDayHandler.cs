@@ -15,7 +15,7 @@ public class CompleteDayHandler : IRequestHandler<CompleteDayCommand>
         CompleteDayCommand request,
         CancellationToken cancellationToken)
     {
-        await _repository.completeDay(request.planId, request.dayId, request.completed);
+        await _repository.CompleteDayAsync(request.planId, request.dayId, request.completed);
 
     }
 }

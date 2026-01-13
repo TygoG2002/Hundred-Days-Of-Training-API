@@ -10,7 +10,7 @@ namespace Application.interfaces
 {
     public interface IDashboardQueryRepository
     {
-        Task<List<PlanOverviewDto>> GetTodayWorkouts();
+        Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync();
     }
 
 }

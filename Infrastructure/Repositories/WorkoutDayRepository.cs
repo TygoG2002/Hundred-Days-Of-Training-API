@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
             );
         }
 
-        public async Task completeDay(int planId, int dayId, bool completed)
+        public async Task CompleteDayAsync(int planId, int dayId, bool completed)
         {
             var currentDay = await _db.WorkoutDays.SingleOrDefaultAsync(d =>
                       d.WorkoutPlanId == planId &&

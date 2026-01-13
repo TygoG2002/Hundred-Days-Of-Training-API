@@ -8,9 +8,28 @@ namespace Domain.Entities.Template
 {
     public class WorkoutTemplate
     {
+        public int Id { get; private set; }
+        public string Name { get; private set; } = "";
+        public string? Description { get; private set; }
+        public int EstimatedDurationMinutes { get; private set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
+        private readonly List<TemplateExercise> _exercises = new();
+        public IReadOnlyCollection<TemplateExercise> Exercises => _exercises;
 
+        private WorkoutTemplate() { } 
+
+        public WorkoutTemplate(string name, int estimatedDurationMinutes, string? description = null)
+        {
+            Name = name;
+            EstimatedDurationMinutes = estimatedDurationMinutes;
+            Description = description;
+        }
+
+        public void AddExercise(string name, int sets, int reps, int restSeconds)
+        {
+            _exercises.Add(new TemplateExercise(
+                name, sets, reps, restSeconds));
+        }
     }
+
 }

@@ -1,6 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.WorkoutSession.GetWorkoutInfo;
 using Application.WorkoutSession.StartWorkoutSession;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HundredDays.Api.Controllers
 {
@@ -22,5 +23,16 @@ namespace HundredDays.Api.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+
+        [HttpGet("{sessionId}")]
+        public async Task<IActionResult> Get(int sessionId)
+        {
+            var result = await _mediator.Send(
+                new GetWorkoutInfoQuery(sessionId));
+
+            return Ok(result);
+        }
+
     }
 }

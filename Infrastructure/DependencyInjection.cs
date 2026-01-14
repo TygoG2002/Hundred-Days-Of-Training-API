@@ -40,7 +40,7 @@ namespace Infrastructure
             services.AddScoped<IDashboardQueryRepository, DashboardRepository>();
             services.AddScoped<ITemplateQueryRepository, TemplateRepository>();
             services.AddScoped<ISessionCommandRepository, SessionRepository>();
-
+            services.AddScoped<ISessionQueryRepository, SessionRepository>();
             return services;
         }
     }

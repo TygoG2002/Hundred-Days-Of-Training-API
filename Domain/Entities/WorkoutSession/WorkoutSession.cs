@@ -14,14 +14,13 @@ namespace Domain.Entities.WorkoutSession
 
         public WorkoutTemplate WorkoutTemplate { get; private set; } = null!;
 
-
         public DateTime StartedAt { get; private set; }
-
         public DateTime? FinishedAt { get; private set; }
 
-        private WorkoutSession() 
-        {
-        }
+        private readonly List<WorkoutSessionExercise> _exercises = new();
+        public IReadOnlyCollection<WorkoutSessionExercise> Exercises => _exercises;
+
+        private WorkoutSession() { }
 
         public WorkoutSession(int workoutTemplateId)
         {
@@ -33,6 +32,6 @@ namespace Domain.Entities.WorkoutSession
         {
             FinishedAt = DateTime.UtcNow;
         }
-
     }
+
 }

@@ -1,6 +1,5 @@
 ﻿using Domain.Entities.Template;
 using Domain.Entities.WorkoutSession;
-using Domain.Entities.WorkoutSession.Domain.Entities.WorkoutSession;
 using HundredDays.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +26,9 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // -------------------------
+        // WorkoutTemplate
+        // -------------------------
         modelBuilder.Entity<WorkoutTemplate>(b =>
         {
             b.ToTable("WorkoutTemplate");
@@ -75,6 +77,9 @@ public class AppDbContext : DbContext
                 .HasConversion<int>();
         });
 
+        // -------------------------
+        // WorkoutSession (AGGREGATE ROOT)
+        // -------------------------
         modelBuilder.Entity<WorkoutSession>(b =>
         {
             b.ToTable("WorkoutSession");
@@ -87,8 +92,20 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(x => x.WorkoutTemplateId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasMany(x => x.Exercises)
+                .WithOne()
+                .HasForeignKey(x => x.WorkoutSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.Navigation(x => x.Exercises)
+                .HasField("_exercises")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
+        // -------------------------
+        // WorkoutSessionExercise
+        // -------------------------
         modelBuilder.Entity<WorkoutSessionExercise>(b =>
         {
             b.ToTable("WorkoutSessionExercise");
@@ -109,6 +126,9 @@ public class AppDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
+        // -------------------------
+        // WorkoutSessionSet
+        // -------------------------
         modelBuilder.Entity<WorkoutSessionSet>(b =>
         {
             b.ToTable("WorkoutSessionSet");

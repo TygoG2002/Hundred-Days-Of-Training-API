@@ -52,3 +52,10 @@ Content-Type: application/json
 
 1
 
+
+
+###
+GET {{baseUrl}}/api/sessions/2 
+Accept: application/json
+
+

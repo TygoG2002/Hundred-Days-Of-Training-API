@@ -5,6 +5,7 @@ using Application.Sets.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure
 {
@@ -38,7 +39,7 @@ namespace Infrastructure
             services.AddScoped<IDayCommandRepository, WorkoutDayRepository>();
             services.AddScoped<IDashboardQueryRepository, DashboardRepository>();
             services.AddScoped<ITemplateQueryRepository, TemplateRepository>();
-
+            services.AddScoped<ISessionCommandRepository, SessionRepository>();
 
             return services;
         }

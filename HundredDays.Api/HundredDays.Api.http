@@ -40,3 +40,15 @@ Accept: application/json
 ###
 GET {{baseUrl}}/api/Templates
 Accept: application/json
+
+
+
+
+###
+POST {{baseUrl}}/api/sessions/start
+Accept: application/json
+Content-Type: application/json
+
+
+1
+

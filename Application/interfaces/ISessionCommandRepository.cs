@@ -1,4 +1,5 @@
-﻿using Application.WorkoutSession.StartWorkoutSession;
+﻿using Application.WorkoutSession.FinishWorkoutSession;
+using Application.WorkoutSession.StartWorkoutSession;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Application.interfaces
 {
     public interface ISessionCommandRepository
     {
-        Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId); 
+        Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId);
+
+        Task SaveWorkoutSessionAsync(int sessionId, List<FinishWorkoutSessionExerciseDto> exercises);
     }
 }

@@ -25,7 +25,7 @@ namespace Domain.Entities.WorkoutSession
             SetNumber = setNumber;
         }
 
-        public void Update(int reps, decimal weightKg)
+        public void Update(int? reps, decimal? weightKg)
         {
             Reps = reps;
             WeightKg = weightKg;

@@ -1,4 +1,5 @@
 ﻿using Application.interfaces;
+using Application.WorkoutSession.FinishWorkoutSession;
 using Application.WorkoutSession.GetWorkoutInfo;
 using Application.WorkoutSession.StartWorkoutSession;
 using Domain.Entities.WorkoutSession;
@@ -82,9 +83,43 @@ namespace Infrastructure.Repositories
             };
         }
 
+      public async Task SaveWorkoutSessionAsync(int sessionId, List<FinishWorkoutSessionExerciseDto> exercises)
+        {
+            var session = await _db.WorkoutSessions
+                .Include(s => s.Exercises)
+                    .ThenInclude(e => e.Sets)
+                .FirstOrDefaultAsync(s => s.Id == sessionId);
 
+            if (session == null)
+                throw new InvalidOperationException("WorkoutSession not found");
 
+            foreach (var exerciseDto in exercises)
+            {
+                var sessionExercise = session.Exercises
+                    .FirstOrDefault(e => e.Id == exerciseDto.WorkoutSessionExerciseId);
 
+                if (sessionExercise == null)
+                    continue;
+
+                foreach (var setDto in exerciseDto.Sets)
+                {
+                    var set = sessionExercise.Sets
+                        .FirstOrDefault(s => s.SetNumber == setDto.SetNumber);
+
+                    if (set == null)
+                        continue;
+
+                    set.Update(
+                        setDto.Reps,
+                        setDto.WeightKg
+                    );
+                }
+            }
+
+            session.Finish();
+
+            await _db.SaveChangesAsync();
+        }
 
 
         public async Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId)
@@ -126,5 +161,6 @@ namespace Infrastructure.Repositories
             };
         }
 
+      
     }
 }

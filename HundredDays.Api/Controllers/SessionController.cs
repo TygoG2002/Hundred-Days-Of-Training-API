@@ -1,7 +1,9 @@
-﻿using Application.WorkoutSession.GetWorkoutInfo;
+﻿using Application.WorkoutSession.FinishWorkoutSession;
+using Application.WorkoutSession.GetWorkoutInfo;
 using Application.WorkoutSession.StartWorkoutSession;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace HundredDays.Api.Controllers
 {
@@ -33,6 +35,32 @@ namespace HundredDays.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("{sessionId}/finish")]
+        public async Task<IActionResult> Finish(
+    [FromRoute] int sessionId,
+    [FromBody] FinishWorkoutSessionRequest request)
+        {
+            if (sessionId != request.SessionId)
+                return BadRequest("SessionId mismatch");
+
+            await _mediator.Send(
+                new FinishWorkoutSessionCommand(
+                    request.SessionId,
+                    request.Exercises));
+
+            return NoContent();
+        }
+
+    //    [HttpPost("{sessionId}/finish")]
+    //    public async Task<IActionResult> FinishDebug(
+    //int sessionId,
+    //[FromBody] JsonElement body)
+    //    {
+    //        return Ok(body.ToString());
+    //    }
+
+
 
     }
 }

@@ -46,10 +46,7 @@ public class AppDbContext : DbContext
                 .HasField("_exercises")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-            b.HasMany(x => x.ScheduledDays)
-                .WithOne()
-                .HasForeignKey("WorkoutTemplateId")
-                .OnDelete(DeleteBehavior.Cascade);
+         
 
             b.Navigation(x => x.ScheduledDays)
                 .HasField("_scheduledDays")

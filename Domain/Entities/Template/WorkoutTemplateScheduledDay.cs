@@ -11,15 +11,19 @@ namespace Domain.Entities.Template
         public int Id { get; private set; }
         public DayOfWeek DayOfWeek { get; private set; }
 
-        private WorkoutTemplateScheduledDay() { } 
+        public int WorkoutTemplateId { get; private set; }
+        public WorkoutTemplate WorkoutTemplate { get; private set; } = null!;
 
+        private WorkoutTemplateScheduledDay() { }
 
-
-
-        public WorkoutTemplateScheduledDay(DayOfWeek dayOfWeek)
+        public WorkoutTemplateScheduledDay(
+            DayOfWeek dayOfWeek,
+            int workoutTemplateId)
         {
             DayOfWeek = dayOfWeek;
+            WorkoutTemplateId = workoutTemplateId;
         }
     }
+
 }
 

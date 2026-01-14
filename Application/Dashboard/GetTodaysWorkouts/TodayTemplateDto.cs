@@ -1,6 +1,4 @@
-﻿using Application.Plans.GetPlansWithProgress;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.Dashboard.GetTodaysWorkouts
 {
-    public record GetTodayWorkoutsQuery: IRequest<TodayDashboardDto>;
+    public class TodayTemplateDto
+    {
+        public int TemplateId { get; set; }
+        public string Name { get; set; } = "";
+    }
 
 }

@@ -1,4 +1,5 @@
-﻿using Application.interfaces;
+﻿using Application.Dashboard.GetTodaysWorkouts;
+using Application.interfaces;
 using Application.Plans.GetPlansWithProgress;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +14,35 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
+        public async Task<List<TodayTemplateDto>> GetTodayTemplatesAsync()
+        {
+            var todayDate = DateTime.Today;
+            var todayDayOfWeek = DateTime.Today.DayOfWeek;
+
+            // Templates that are already finished today
+            var finishedTemplateIdsToday = await _db.WorkoutSessions
+                .Where(s =>
+                    s.FinishedAt != null &&
+                    s.FinishedAt.Value.Date == todayDate)
+                .Select(s => s.WorkoutTemplateId)
+                .Distinct()
+                .ToListAsync();
+
+            return await _db.WorkoutTemplateScheduledDays
+                .Include(x => x.WorkoutTemplate)
+                .Where(x => x.DayOfWeek == todayDayOfWeek)
+                .Where(x => !finishedTemplateIdsToday.Contains(x.WorkoutTemplateId))
+                .Select(x => new TodayTemplateDto
+                {
+                    TemplateId = x.WorkoutTemplateId,
+                    Name = x.WorkoutTemplate.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync()
         {
-            var today = DateTime.Now.Date;
+            var today = DateTime.Today;
 
             var days = await _db.WorkoutDays
                 .Include(d => d.Plan)
@@ -32,7 +59,7 @@ namespace Infrastructure.Repositories
                         .FirstOrDefault(d => d.CompletedAt == null);
 
                     if (nextDay == null)
-                        return null; 
+                        return null;
 
                     var doneToday = group.Any(d =>
                         d.CompletedAt != null &&
@@ -54,6 +81,5 @@ namespace Infrastructure.Repositories
                 .Where(x => x != null)
                 .ToList()!;
         }
-
     }
 }

@@ -11,6 +11,8 @@ namespace Application.interfaces
     public interface IDashboardQueryRepository
     {
         Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync();
+        Task<List<TodayTemplateDto>> GetTodayTemplatesAsync();
     }
+
 
 }

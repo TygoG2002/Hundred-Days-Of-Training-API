@@ -1,11 +1,13 @@
 ﻿using Application.Dashboard.GetTodaysWorkouts;
+using Application.Dashboard.GetWeekPlanningWorkouts;
+using Application.Dashboard.UpdateWeekPlanning;
 using Application.interfaces;
 using Application.Plans.GetPlansWithProgress;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    internal class DashboardRepository : IDashboardQueryRepository
+    internal class DashboardRepository : IDashboardQueryRepository, IDashboardCommandRepository
     {
         private readonly AppDbContext _db;
 
@@ -81,5 +83,31 @@ namespace Infrastructure.Repositories
                 .Where(x => x != null)
                 .ToList()!;
         }
+        public async Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync()
+        {
+            return await _db.WorkoutTemplateScheduledDays
+                .Select(d => new GetWeekPlanningDto
+                {
+                    Id = d.Id,                      
+                    DayOfWeek = d.DayOfWeek,
+                    templateId = d.WorkoutTemplateId
+                })
+                .ToListAsync();
+        }
+
+        public async Task UpdateWeekPlanningAsync(UpdateWeekPlanningDto request)
+        {
+            var existing = await _db.WorkoutTemplateScheduledDays
+                .FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if (existing == null)
+                return;
+
+            existing.UpdateDayOfWeek(request.DayOfWeek);
+
+            await _db.SaveChangesAsync();
+        }
+
+
     }
 }

@@ -23,7 +23,15 @@ namespace Domain.Entities.Template
             DayOfWeek = dayOfWeek;
             WorkoutTemplateId = workoutTemplateId;
         }
+        public void UpdateDayOfWeek(DayOfWeek day)
+        {
+            this.DayOfWeek = day;
+        }
+
     }
+
+
+    
 
 }
 

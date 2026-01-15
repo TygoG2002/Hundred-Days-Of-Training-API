@@ -1,4 +1,5 @@
 ﻿using Application.Dashboard.GetTodaysWorkouts;
+using Application.Dashboard.GetWeekPlanningWorkouts;
 using Application.Plans.GetPlansWithProgress;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Application.interfaces
     {
         Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync();
         Task<List<TodayTemplateDto>> GetTodayTemplatesAsync();
+        Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync();
     }
 
 

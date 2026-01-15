@@ -53,9 +53,21 @@ Content-Type: application/json
 1
 
 
-
 ###
 GET {{baseUrl}}/api/sessions/2 
 Accept: application/json
 
+
+###
+GET {{baseUrl}}/api/dashboard/week
+
+
+### Update week planning (drag & drop)
+PUT {{baseUrl}}/api/dashboard/week
+Content-Type: application/json
+
+{
+  "id": 3,
+  "dayOfWeek": 4
+}
 

@@ -124,22 +124,61 @@ namespace Infrastructure.Repositories
 
         public async Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId)
         {
-            var template = await _db.WorkoutTemplates
-                .Include(t => t.Exercises)
-                .FirstOrDefaultAsync(t => t.Id == templateId);
+            var existing = await _db.WorkoutSessions
+                .Include(s => s.Exercises)
+                    .ThenInclude(e => e.Sets)
+                .Where(s =>
+                    s.WorkoutTemplateId == templateId &&
+                    s.FinishedAt == null)
+                .OrderByDescending(s => s.StartedAt)
+                .FirstOrDefaultAsync();
 
-            if (template == null)
-                throw new InvalidOperationException("WorkoutTemplate not found");
+            if (existing != null)
+            {
+                if (!existing.Exercises.Any())
+                {
+                    var template = await _db.WorkoutTemplates
+                        .Include(t => t.Exercises)
+                        .FirstAsync(t => t.Id == templateId);
 
-            var session = new WorkoutSession(templateId);
+                    foreach (var te in template.Exercises)
+                    {
+                        var sessionExercise = new WorkoutSessionExercise(
+                            existing.Id,
+                            te.Name,
+                            te.Sets,
+                            te.Reps,
+                            te.RestSeconds
+                        );
 
-            _db.WorkoutSessions.Add(session);
+                        for (int i = 1; i <= te.Sets; i++)
+                            sessionExercise.AddSet(i, existing.Id);
+
+                        _db.WorkoutSessionExercises.Add(sessionExercise);
+                    }
+
+                    await _db.SaveChangesAsync();
+                }
+
+                return new WorkoutSessionDto
+                {
+                    SessionId = existing.Id,
+                    StartedAt = existing.StartedAt
+                };
+            }
+
+            var newSession = new WorkoutSession(templateId);
+            _db.WorkoutSessions.Add(newSession);
             await _db.SaveChangesAsync();
 
-            foreach (var te in template.Exercises)
+            var tpl = await _db.WorkoutTemplates
+                .Include(t => t.Exercises)
+                .FirstAsync(t => t.Id == templateId);
+
+            foreach (var te in tpl.Exercises)
             {
                 var sessionExercise = new WorkoutSessionExercise(
-                    session.Id,
+                    newSession.Id,
                     te.Name,
                     te.Sets,
                     te.Reps,
@@ -147,7 +186,7 @@ namespace Infrastructure.Repositories
                 );
 
                 for (int i = 1; i <= te.Sets; i++)
-                    sessionExercise.AddSet(i, session.Id);
+                    sessionExercise.AddSet(i, newSession.Id);
 
                 _db.WorkoutSessionExercises.Add(sessionExercise);
             }
@@ -156,11 +195,11 @@ namespace Infrastructure.Repositories
 
             return new WorkoutSessionDto
             {
-                SessionId = session.Id,
-                StartedAt = session.StartedAt
+                SessionId = newSession.Id,
+                StartedAt = newSession.StartedAt
             };
         }
 
-      
+
     }
 }

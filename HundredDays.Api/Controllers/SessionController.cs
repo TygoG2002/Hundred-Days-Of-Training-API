@@ -1,4 +1,5 @@
-﻿using Application.WorkoutSession.FinishWorkoutSession;
+﻿using Application.WorkoutSession.DeleteWorkoutSession;
+using Application.WorkoutSession.FinishWorkoutSession;
 using Application.WorkoutSession.GetWorkoutInfo;
 using Application.WorkoutSession.StartWorkoutSession;
 using MediatR;
@@ -37,30 +38,24 @@ namespace HundredDays.Api.Controllers
         }
 
         [HttpPost("{sessionId}/finish")]
-        public async Task<IActionResult> Finish(
-    [FromRoute] int sessionId,
-    [FromBody] FinishWorkoutSessionRequest request)
+        public async Task<IActionResult> Finish([FromRoute] int sessionId, [FromBody] FinishWorkoutSessionRequest request)
         {
             if (sessionId != request.SessionId)
                 return BadRequest("SessionId mismatch");
 
-            await _mediator.Send(
-                new FinishWorkoutSessionCommand(
-                    request.SessionId,
-                    request.Exercises));
+            await _mediator.Send(new FinishWorkoutSessionCommand(request.SessionId,request.Exercises));
 
             return NoContent();
         }
 
-    //    [HttpPost("{sessionId}/finish")]
-    //    public async Task<IActionResult> FinishDebug(
-    //int sessionId,
-    //[FromBody] JsonElement body)
-    //    {
-    //        return Ok(body.ToString());
-    //    }
+        [HttpDelete("Delete/{sessionId}")]
+        public async Task<IActionResult> Delete([FromRoute] int sessionId)
+        {
+            var command = new DeleteWorkoutSessionCommand(sessionId);
+            await _mediator.Send(command);
+            return Ok();
+        }
 
-
-
+   
     }
 }

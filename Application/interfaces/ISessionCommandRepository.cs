@@ -13,5 +13,7 @@ namespace Application.interfaces
         Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId);
 
         Task SaveWorkoutSessionAsync(int sessionId, List<FinishWorkoutSessionExerciseDto> exercises);
+
+        Task DeleteWorkoutSessionAsync(int sessionId);
     }
 }

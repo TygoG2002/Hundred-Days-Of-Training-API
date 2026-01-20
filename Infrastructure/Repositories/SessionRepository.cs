@@ -16,6 +16,19 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
+        public async Task DeleteWorkoutSessionAsync(int sessionId)
+        {
+            var session = await _db.WorkoutSessions
+                .FirstOrDefaultAsync(s => s.Id == sessionId);
+
+            if (session == null)
+                return;
+
+            _db.WorkoutSessions.Remove(session);
+            await _db.SaveChangesAsync();
+        }
+
+
         public async Task<WorkoutSessionDetailsDto> GetSession(int sessionId)
         {
             var session = await _db.WorkoutSessions

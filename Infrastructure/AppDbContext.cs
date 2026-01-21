@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Template;
+﻿using Domain.Entities.Habits;
+using Domain.Entities.Template;
 using Domain.Entities.WorkoutSession;
 using HundredDays.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,12 @@ public class AppDbContext : DbContext
     public DbSet<WorkoutSessionExercise> WorkoutSessionExercises => Set<WorkoutSessionExercise>();
     public DbSet<WorkoutSessionSet> WorkoutSessionSets => Set<WorkoutSessionSet>();
 
+    public DbSet<Habit> Habit => Set<Habit>();
+
+    public DbSet<HabitEntry> HabitEntry => Set<HabitEntry>();
+
+
+
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -26,9 +33,7 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // -------------------------
         // WorkoutTemplate
-        // -------------------------
         modelBuilder.Entity<WorkoutTemplate>(b =>
         {
             b.ToTable("WorkoutTemplate");
@@ -74,9 +79,7 @@ public class AppDbContext : DbContext
                 .HasConversion<int>();
         });
 
-        // -------------------------
-        // WorkoutSession (AGGREGATE ROOT)
-        // -------------------------
+        // WorkoutSession 
         modelBuilder.Entity<WorkoutSession>(b =>
         {
             b.ToTable("WorkoutSession");

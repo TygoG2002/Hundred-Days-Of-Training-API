@@ -11,7 +11,9 @@ namespace Domain.Entities.Habits
         public int Id { get; private set; }
 
         public string Name { get; private set; }
-        
+
+        public int TargetValue { get; private set; }
+
 
     }
 }

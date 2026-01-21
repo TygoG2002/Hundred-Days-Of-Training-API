@@ -1,5 +1,4 @@
-﻿using Application.Habbit.GetHabbits;
-using Application.Habits.GetHabits;
+﻿using Application.Habits.GetHabits;
 using Application.interfaces;
 using MediatR;
 

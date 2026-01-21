@@ -1,5 +1,4 @@
-﻿using Application.Habbit.GetHabbits;
-using MediatR;
+﻿using MediatR;
 
 namespace Application.Habits.GetHabits
 {

@@ -76,3 +76,10 @@ Content-Type: application/json
 GET {{baseUrl}}/api/habits/
 Accept: application/json
 
+### Add more value (another glass)
+POST {{baseUrl}}/api/habits/1/add-value
+Content-Type: application/json
+
+{
+  "amount": 500
+}

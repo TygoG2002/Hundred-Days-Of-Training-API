@@ -1,4 +1,4 @@
-﻿using Application.Habbit.GetHabbits;
+﻿using Application.Habits.GetHabits;
 using System;
 using System.Collections.Generic;
 using System.Linq;

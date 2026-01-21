@@ -1,5 +1,6 @@
-﻿using Application.Habbit.GetHabbits;
-using Application.Habits.GetHabits;
+﻿using Application.Habits.GetHabits;
+using Application.Habits.UpdateValue;
+using HundredDays.Api.Contracts.Habits;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,5 +24,12 @@ namespace HundredDays.Api.Controllers
             var result = await _mediator.Send(new GetHabitsQuery());
             return Ok(result);
         }
+
+        [HttpPost("{habitId}/add-value")]
+        public async Task AddValue(int habitId, [FromBody] UpdateHabitValueRequest request)
+        {
+            await _mediator.Send(new UpdateHabitValueCommand(habitId, request.Amount));
+        }
+
     }
 }

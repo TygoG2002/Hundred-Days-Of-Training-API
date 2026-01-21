@@ -1,5 +1,6 @@
 ﻿using Application.Days.Interfaces;
 using Application.interfaces;
+using Application.Interfaces;
 using Application.Plans.Interfaces;
 using Application.Sets.Interfaces;
 using Infrastructure.Repositories;
@@ -43,6 +44,7 @@ namespace Infrastructure
             services.AddScoped<ISessionCommandRepository, SessionRepository>();
             services.AddScoped<ISessionQueryRepository, SessionRepository>();
             services.AddScoped<IHabitQueryRepository, HabitRepository>();
+            services.AddScoped<IHabitCommandRepository, HabitRepository>();
             return services;
         }
     }

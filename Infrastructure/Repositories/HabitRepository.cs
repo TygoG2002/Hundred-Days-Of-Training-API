@@ -21,6 +21,11 @@ namespace Infrastructure.Repositories
 
             return await _db.Habit
                 .AsNoTracking()
+                .Where(h =>
+                    !_db.HabitEntry.Any(e =>
+                        e.HabitId == h.Id &&
+                        e.Date == today &&
+                        e.Completed))
                 .Select(h => new HabitDto
                 {
                     Id = h.Id,
@@ -44,6 +49,7 @@ namespace Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+
 
 
 

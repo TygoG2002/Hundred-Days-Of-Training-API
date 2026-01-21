@@ -13,10 +13,11 @@
 
         private HabitEntry() { }
 
-        public HabitEntry(int habitId)
+        public HabitEntry(int habitId, int value)
         {
             HabitId = habitId;
             Completed = false;
+            Value = value;
         }
 
         public void Complete()

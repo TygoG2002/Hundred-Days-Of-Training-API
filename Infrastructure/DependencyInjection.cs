@@ -42,6 +42,7 @@ namespace Infrastructure
             services.AddScoped<ITemplateQueryRepository, TemplateRepository>();
             services.AddScoped<ISessionCommandRepository, SessionRepository>();
             services.AddScoped<ISessionQueryRepository, SessionRepository>();
+            services.AddScoped<IHabitQueryRepository, HabitRepository>();
             return services;
         }
     }

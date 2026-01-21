@@ -71,3 +71,8 @@ Content-Type: application/json
   "dayOfWeek": 4
 }
 
+
+###
+GET {{baseUrl}}/api/habits/
+Accept: application/json
+

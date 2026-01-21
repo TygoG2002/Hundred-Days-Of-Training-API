@@ -7,15 +7,25 @@ using System.Threading.Tasks;
 
 namespace Application.Habits.GetHabits
 {
-    public class HabitDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
+    using Domain.Entities.Habits;
 
-        public int TargetValue { get; set; }
+  
+        public class HabitDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; } = null!;
 
-        public int TodayValue { get; set; }
-        public bool TodayCompleted { get; set; }
-    }
+            public HabitType Type { get; set; }
+
+            public int? TargetValue { get; set; }
+
+            public int TodayValue { get; set; }
+            public bool TodayCompleted { get; set; }
+
+            public bool IsValueBased => Type == HabitType.VALUE;
+            public bool IsBinary => Type == HabitType.BINARY;
+        }
+    
+
 }
 

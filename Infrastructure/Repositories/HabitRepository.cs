@@ -25,6 +25,7 @@ namespace Infrastructure.Repositories
                 {
                     Id = h.Id,
                     Name = h.Name,
+                    Type = h.Type,
                     TargetValue = h.TargetValue,
 
                     TodayValue = _db.HabitEntry
@@ -43,6 +44,7 @@ namespace Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+
 
 
 
@@ -71,18 +73,23 @@ namespace Infrastructure.Repositories
             }
 
             if (entry.Completed)
-                return; 
+                return;
 
-            entry.AddValue(amount);
-
-           
-            if (entry.Value >= habit.TargetValue)
+            if (habit.Type == HabitType.BINARY)
             {
                 entry.Complete();
+            }
+            else 
+            {
+                entry.AddValue(amount);
+
+                if (entry.Value >= habit.TargetValue)
+                    entry.Complete();
             }
 
             await _db.SaveChangesAsync();
         }
+
 
 
     }

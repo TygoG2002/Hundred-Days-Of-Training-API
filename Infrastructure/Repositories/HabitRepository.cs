@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<HabitDto>> GetAllAsync()
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var today = DateOnly.FromDateTime(DateTime.Now);
 
             return await _db.Habit
                 .AsNoTracking()

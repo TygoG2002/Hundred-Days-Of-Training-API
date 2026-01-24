@@ -1,4 +1,7 @@
-﻿using Domain.Entities.Habits;
+﻿
+// ⚠️ LEGACY EF CORE MAPPING
+
+using Domain.Entities.Habits;
 using Domain.Entities.Template;
 using Domain.Entities.WorkoutSession;
 using HundredDays.Domain.Entities;

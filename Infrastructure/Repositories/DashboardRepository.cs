@@ -56,11 +56,9 @@ namespace Infrastructure.Repositories
             connection.Open();
 
             const string query = """
-        SELECT
+               SELECT DISTINCT
             p.Id,
-            p.Name,
-            (SUM(d.CompletedAt IS NOT NULL) + 0) AS CompletedDays,
-            (COUNT(*) + 0)                       AS TotalDays
+            p.Name
         FROM WorkoutPlans p
         JOIN WorkoutDays d 
             ON d.WorkoutPlanId = p.Id
@@ -68,9 +66,10 @@ namespace Infrastructure.Repositories
         HAVING
             SUM(d.CompletedAt IS NULL) > 0
             AND SUM(
-                d.CompletedAt IS NOT NULL 
+                d.CompletedAt IS NOT NULL
                 AND DATE(d.CompletedAt) = CURDATE()
             ) = 0;
+        
         """;
 
             var result = await connection.QueryAsync<PlanOverviewDto>(query);

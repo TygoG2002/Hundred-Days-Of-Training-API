@@ -24,7 +24,6 @@ namespace Infrastructure.Repositories
 
         public async Task<List<TodayTemplateDto>> GetTodayTemplatesAsync()
         {
-
             var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
@@ -45,15 +44,17 @@ namespace Infrastructure.Repositories
                 """;
 
             var result = await connection.QueryAsync<TodayTemplateDto>(query, 
-                new { DayOfWeek = dayOfWeek }
-);
+                new { DayOfWeek = dayOfWeek });
 
+            connection.Close();
             return result.ToList(); 
         }
 
         public async Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync()
         {
             var today = DateTime.Today;
+
+
 
             var days = await _db.WorkoutDays
                 .Include(d => d.Plan)
@@ -92,16 +93,20 @@ namespace Infrastructure.Repositories
                 .Where(x => x != null)
                 .ToList()!;
         }
+     
         public async Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync()
         {
-            return await _db.WorkoutTemplateScheduledDays
-                .Select(d => new GetWeekPlanningDto
-                {
-                    Id = d.Id,                      
-                    DayOfWeek = d.DayOfWeek,
-                    templateId = d.WorkoutTemplateId
-                })
-                .ToListAsync();
+            var connection = _connectionFactory.CreateConnection();
+            connection.Open();
+
+            var query = """
+                SELECT w.Id, w.DayOfWeek, w.WorkoutTemplateId AS templateId 
+                FROM WorkoutTemplateScheduledDay w; 
+                """;
+
+            var result = await connection.QueryAsync<GetWeekPlanningDto>(query);
+            connection.Close();
+            return result.ToList();
         }
 
         public async Task UpdateWeekPlanningAsync(UpdateWeekPlanningDto request)

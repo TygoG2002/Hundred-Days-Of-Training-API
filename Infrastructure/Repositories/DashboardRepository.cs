@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Infrastructure.Repositories
 {
-    internal class DashboardRepository : IDashboardQueryRepository, IDashboardCommandRepository
+    public class DashboardRepository : IDashboardQueryRepository, IDashboardCommandRepository
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
@@ -52,48 +52,32 @@ namespace Infrastructure.Repositories
 
         public async Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync()
         {
-            var today = DateTime.Today;
+            using var connection = _connectionFactory.CreateConnection();
+            connection.Open();
 
+            const string query = """
+        SELECT
+            p.Id,
+            p.Name,
+            (SUM(d.CompletedAt IS NOT NULL) + 0) AS CompletedDays,
+            (COUNT(*) + 0)                       AS TotalDays
+        FROM WorkoutPlans p
+        JOIN WorkoutDays d 
+            ON d.WorkoutPlanId = p.Id
+        GROUP BY p.Id, p.Name
+        HAVING
+            SUM(d.CompletedAt IS NULL) > 0
+            AND SUM(
+                d.CompletedAt IS NOT NULL 
+                AND DATE(d.CompletedAt) = CURDATE()
+            ) = 0;
+        """;
 
-
-            var days = await _db.WorkoutDays
-                .Include(d => d.Plan)
-                .ToListAsync();
-
-            return days
-                .GroupBy(d => d.WorkoutPlanId)
-                .Select(group =>
-                {
-                    var plan = group.First().Plan;
-
-                    var nextDay = group
-                        .OrderBy(d => d.DayNumber)
-                        .FirstOrDefault(d => d.CompletedAt == null);
-
-                    if (nextDay == null)
-                        return null;
-
-                    var doneToday = group.Any(d =>
-                        d.CompletedAt != null &&
-                        d.CompletedAt.Value.Date == today);
-
-                    if (doneToday)
-                        return null;
-
-                    var completedDays = group.Count(d => d.CompletedAt != null);
-                    var totalDays = group.Count();
-
-                    return new PlanOverviewDto(
-                        plan.Id,
-                        plan.Name,
-                        completedDays,
-                        totalDays
-                    );
-                })
-                .Where(x => x != null)
-                .ToList()!;
+            var result = await connection.QueryAsync<PlanOverviewDto>(query);
+            return result.ToList();
         }
-     
+
+
         public async Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync()
         {
             var connection = _connectionFactory.CreateConnection();
@@ -111,17 +95,19 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateWeekPlanningAsync(UpdateWeekPlanningDto request)
         {
-            var existing = await _db.WorkoutTemplateScheduledDays
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
+            var connection = _connectionFactory.CreateConnection();
+            connection.Open();
 
-            if (existing == null)
-                return;
+            var newDayOfWeek = request.DayOfWeek;
+            var requestId = request.Id;
 
-            existing.UpdateDayOfWeek(request.DayOfWeek);
+            var query = """
+                 UPDATE WorkoutTemplateScheduledDay SET 
+                DayOfWeek = @DayOfWeek WHERE Id = @Id;
+                """;
 
-            await _db.SaveChangesAsync();
+            var result = await connection.QueryAsync<UpdateWeekPlanningDto>(query,
+               new { DayOfWeek = newDayOfWeek, Id = requestId });
         }
-
-
     }
 }

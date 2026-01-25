@@ -22,13 +22,16 @@ public class WorkoutPlanRepository : IPlanQueryRepository
     public async Task<List<PlanOverviewDto>> GetPlansOverviewAsync()
     {
         return await _db.WorkoutPlans
-            .Select(p => new PlanOverviewDto(
-                p.Id,
-                p.Name,
-                p.Days.Count(d => d.Completed),
-                p.Days.Count()
-            ))
-            .ToListAsync();
+    .Select(p => new PlanOverviewDto
+    {
+        Id = p.Id,
+        Name = p.Name,
+        CompletedDays = p.Days.Count(d => d.CompletedAt != null),
+        TotalDays = p.Days.Count()
+    })
+    .ToListAsync();
+
+
     }
 
 }

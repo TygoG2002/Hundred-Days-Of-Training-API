@@ -3,43 +3,52 @@ using Application.Dashboard.GetWeekPlanningWorkouts;
 using Application.Dashboard.UpdateWeekPlanning;
 using Application.interfaces;
 using Application.Plans.GetPlansWithProgress;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data;
 
 namespace Infrastructure.Repositories
 {
     internal class DashboardRepository : IDashboardQueryRepository, IDashboardCommandRepository
     {
-        private readonly AppDbContext _db;
+        private readonly IDbConnectionFactory _connectionFactory;
 
-        public DashboardRepository(AppDbContext db)
+        private readonly AppDbContext _db; 
+
+        public DashboardRepository(IDbConnectionFactory connectionFactory, AppDbContext db)
         {
+            _connectionFactory = connectionFactory;
             _db = db;
         }
 
         public async Task<List<TodayTemplateDto>> GetTodayTemplatesAsync()
         {
-            var todayDate = DateTime.Today;
-            var todayDayOfWeek = DateTime.Today.DayOfWeek;
 
-            // Templates that are already finished today
-            var finishedTemplateIdsToday = await _db.WorkoutSessions
-                .Where(s =>
-                    s.FinishedAt != null &&
-                    s.FinishedAt.Value.Date == todayDate)
-                .Select(s => s.WorkoutTemplateId)
-                .Distinct()
-                .ToListAsync();
+            var connection = _connectionFactory.CreateConnection();
+            connection.Open();
 
-            return await _db.WorkoutTemplateScheduledDays
-                .Include(x => x.WorkoutTemplate)
-                .Where(x => x.DayOfWeek == todayDayOfWeek)
-                .Where(x => !finishedTemplateIdsToday.Contains(x.WorkoutTemplateId))
-                .Select(x => new TodayTemplateDto
-                {
-                    TemplateId = x.WorkoutTemplateId,
-                    Name = x.WorkoutTemplate.Name
-                })
-                .ToListAsync();
+            var dayOfWeek = DateTime.Today.DayOfWeek;
+
+            string query = """
+                SELECT DISTINCT
+                    w.Id       AS TemplateId,
+                    w.Name
+                FROM WorkoutTemplate w
+                JOIN WorkoutTemplateScheduledDay sd 
+                    ON sd.WorkoutTemplateId = w.Id
+                LEFT JOIN WorkoutSession s
+                    ON s.WorkoutTemplateId = w.Id
+                    AND DATE(s.FinishedAt) = CURDATE()
+                WHERE sd.DayOfWeek = @DayOfWeek
+                  AND s.Id IS NULL;
+                """;
+
+            var result = await connection.QueryAsync<TodayTemplateDto>(query, 
+                new { DayOfWeek = dayOfWeek }
+);
+
+            return result.ToList(); 
         }
 
         public async Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync()

@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
                 return result.ToList();
         }
 
-        public async Task UpdateValueAsync(int habitId, int amount)
+        public async Task AddHabitValueAsync(int habitId, int amount)
         {
             using var connection = _connectionFactory.CreateConnection();
             var today = DateTime.Today;
@@ -59,6 +59,30 @@ namespace Infrastructure.Repositories
             await connection.ExecuteAsync(sql, new { HabitId = habitId, Amount = amount, Today = today }
             );
         }
+
+        public async Task CompleteHabitAsync(int habitId)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var today = DateTime.Today;
+
+            const string sql = """
+                UPDATE HabitEntry
+                SET Completed = 1
+                WHERE HabitId = @HabitId
+                  AND Date = @Today;
+
+                INSERT INTO HabitEntry (HabitId, Date, Value, Completed)
+                SELECT @HabitId, @Today, 0, 1
+                WHERE ROW_COUNT() = 0;
+        """;
+
+            await connection.ExecuteAsync(sql, new
+            {
+                HabitId = habitId,
+                Today = today
+            });
+        }
+
 
     }
 

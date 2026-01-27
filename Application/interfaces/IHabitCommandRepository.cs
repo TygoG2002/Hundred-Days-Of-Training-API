@@ -5,7 +5,7 @@ namespace Application.Interfaces
     public interface IHabitCommandRepository
     {
 
-        Task UpdateValueAsync(int habitId, int amount);
-
+        Task AddHabitValueAsync(int habitId, int amount);
+        Task CompleteHabitAsync(int habitId);
     }
 }

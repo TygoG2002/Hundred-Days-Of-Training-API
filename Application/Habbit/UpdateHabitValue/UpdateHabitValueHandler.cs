@@ -14,7 +14,7 @@ namespace Application.Habits.UpdateValue
 
         public async Task Handle(UpdateHabitValueCommand request, CancellationToken cancellationToken)
         {
-            await _repository.UpdateValueAsync(
+            await _repository.AddHabitValueAsync(
                 request.HabitId,
                 request.Amount);
         }

@@ -1,6 +1,7 @@
 ﻿using Application.Habits.GetHabits;
 using Application.interfaces;
 using Application.Interfaces;
+using Dapper;
 using Domain.Entities.Habits;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,49 +11,38 @@ namespace Infrastructure.Repositories
     {
         private readonly AppDbContext _db;
 
-        public HabitRepository(AppDbContext db)
+        private readonly IDbConnectionFactory _connectionFactory;
+        public HabitRepository(AppDbContext db, IDbConnectionFactory connectionFactory)
         {
             _db = db;
+            _connectionFactory = connectionFactory;
         }
 
         public async Task<List<HabitDto>> GetAllAsync()
         {
-            var today = DateOnly.FromDateTime(DateTime.Now);
+            var connection = _connectionFactory.CreateConnection();
+            connection.Open();
 
-            return await _db.Habit
-                .AsNoTracking()
-                .Where(h =>
-                    !_db.HabitEntry.Any(e =>
-                        e.HabitId == h.Id &&
-                        e.Date == today &&
-                        e.Completed))
-                .Select(h => new HabitDto
-                {
-                    Id = h.Id,
-                    Name = h.Name,
-                    Type = h.Type,
-                    TargetValue = h.TargetValue,
-
-                    TodayValue = _db.HabitEntry
-                        .Where(e =>
-                            e.HabitId == h.Id &&
-                            e.Date == today)
-                        .Select(e => e.Value)
-                        .FirstOrDefault(),
-
-                    TodayCompleted = _db.HabitEntry
-                        .Where(e =>
-                            e.HabitId == h.Id &&
-                            e.Date == today)
-                        .Select(e => e.Completed)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+            var query = @"SELECT h.Id, h.Name, h.Type, h.TargetValue, 
+            e.Value AS TodayValue,
+            e.Completed AS TodayCompleted
+                FROM Habit h
+                    LEFT JOIN HabitEntry e
+                    ON e.HabitId = h.Id
+                   AND e.Date = @today
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM HabitEntry x
+                    WHERE x.HabitId = h.Id
+                      AND x.Date = @today
+                      AND x.Completed = 1
+);
+";
+            var result = await connection.QueryAsync<HabitDto>(
+                query,
+                new { today = DateTime.Today });  
+                return result.ToList();
         }
-
-
-
-
 
         public async Task UpdateValueAsync(int habitId, int amount)
         {

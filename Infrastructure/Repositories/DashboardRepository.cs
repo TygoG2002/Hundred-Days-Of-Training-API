@@ -13,13 +13,9 @@ namespace Infrastructure.Repositories
     public class DashboardRepository : IDashboardQueryRepository, IDashboardCommandRepository
     {
         private readonly IDbConnectionFactory _connectionFactory;
-
-        private readonly AppDbContext _db; 
-
-        public DashboardRepository(IDbConnectionFactory connectionFactory, AppDbContext db)
+        public DashboardRepository(IDbConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
-            _db = db;
         }
 
         public async Task<List<TodayTemplateDto>> GetTodayTemplatesAsync()

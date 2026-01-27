@@ -34,27 +34,34 @@ namespace Infrastructure.Repositories
 
             var result = await connection.QueryAsync<DayOverviewDto>(query, new { Id = planId });
 
-            return result.ToList(); 
+            return result.ToList();
         }
 
         public async Task CompleteDayAsync(int planId, int dayId, bool completed)
         {
             using var connection = _connectionFactory.CreateConnection();
-            connection.Open();
 
-            const string sql = @"
-            UPDATE WorkoutDays
-            SET Completed = @Completed
-            WHERE WorkoutPlanId = @PlanId
-              AND DayNumber = @DayId;
-        ";
+            const string sql = """
+        UPDATE WorkoutDays
+        SET
+            Completed = @Completed,
+            CompletedAt = CASE
+                WHEN @Completed = 1 THEN NOW()
+                ELSE NULL
+            END
+        WHERE WorkoutPlanId = @PlanId
+          AND DayNumber = @DayId;
+    """;
 
-            await connection.ExecuteAsync(sql, new {
-                    PlanId = planId,
-                    DayId = dayId,
-                    Completed = completed
-                }
-            );
+            var rows = await connection.ExecuteAsync(sql, new
+            {
+                PlanId = planId,
+                DayId = dayId,
+                Completed = completed
+            });
+
+            if (rows == 0)
+                throw new InvalidOperationException("WorkoutDay not found");
         }
     }
-}
+    }

@@ -2,25 +2,22 @@
 using Application.interfaces;
 using Application.Interfaces;
 using Dapper;
-using Domain.Entities.Habits;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class HabitRepository : IHabitQueryRepository, IHabitCommandRepository
     {
-        private readonly AppDbContext _db;
 
         private readonly IDbConnectionFactory _connectionFactory;
-        public HabitRepository(AppDbContext db, IDbConnectionFactory connectionFactory)
+        public HabitRepository(IDbConnectionFactory connectionFactory)
         {
-            _db = db;
             _connectionFactory = connectionFactory;
         }
 
         public async Task<List<HabitDto>> GetAllAsync()
         {
-            var connection = _connectionFactory.CreateConnection();
+            using var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
             var query = @"SELECT h.Id, h.Name, h.Type, h.TargetValue, 
@@ -35,9 +32,8 @@ namespace Infrastructure.Repositories
                     FROM HabitEntry x
                     WHERE x.HabitId = h.Id
                       AND x.Date = @today
-                      AND x.Completed = 1
-);
-";
+                      AND x.Completed = 1);";
+
             var result = await connection.QueryAsync<HabitDto>(
                 query,
                 new { today = DateTime.Today });  
@@ -46,47 +42,28 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateValueAsync(int habitId, int amount)
         {
-            if (amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero");
+            using var connection = _connectionFactory.CreateConnection();
+            var today = DateTime.Today;
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var sql = @"
+            UPDATE HabitEntry
+            SET Value = Value + @Amount
+            WHERE HabitId = @HabitId
+              AND Date = @Today;
 
-            var habit = await _db.Habit
-                .FirstOrDefaultAsync(h => h.Id == habitId);
+            INSERT INTO HabitEntry (HabitId, Date, Value, Completed)
+            SELECT @HabitId, @Today, @Amount, 0
+            WHERE ROW_COUNT() = 0;
+            ";
 
-            if (habit == null)
-                throw new InvalidOperationException("Habit not found");
-
-            var entry = await _db.HabitEntry
-                .FirstOrDefaultAsync(e =>
-                    e.HabitId == habitId &&
-                    e.Date == today);
-
-            if (entry == null)
-            {
-                entry = new HabitEntry(habitId, today);
-                _db.HabitEntry.Add(entry);
-            }
-
-            if (entry.Completed)
-                return;
-
-            if (habit.Type == HabitType.BINARY)
-            {
-                entry.Complete();
-            }
-            else 
-            {
-                entry.AddValue(amount);
-
-                if (entry.Value >= habit.TargetValue)
-                    entry.Complete();
-            }
-
-            await _db.SaveChangesAsync();
+            await connection.ExecuteAsync(sql, new { HabitId = habitId, Amount = amount, Today = today }
+            );
         }
 
-
-
     }
+
+
+
+
 }
+

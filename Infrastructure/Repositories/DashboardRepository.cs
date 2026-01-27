@@ -75,7 +75,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync()
         {
-            var connection = _connectionFactory.CreateConnection();
+            using var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
             var query = """
@@ -90,7 +90,7 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateWeekPlanningAsync(UpdateWeekPlanningDto request)
         {
-            var connection = _connectionFactory.CreateConnection();
+            using var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
             var newDayOfWeek = request.DayOfWeek;

@@ -30,7 +30,8 @@ namespace Infrastructure.Repositories
         }
 
 
-        public async Task<WorkoutSessionDetailsDto> GetSession(int sessionId)
+        //TODO convert to dapper 
+      public async Task<WorkoutSessionDetailsDto> GetSession(int sessionId)
         {
             var session = await _db.WorkoutSessions
                 .Include(s => s.Exercises)
@@ -97,7 +98,9 @@ namespace Infrastructure.Repositories
             };
         }
 
-      public async Task SaveWorkoutSessionAsync(int sessionId, List<FinishWorkoutSessionExerciseDto> exercises)
+        //TODO convert to dapper 
+
+        public async Task SaveWorkoutSessionAsync(int sessionId, List<FinishWorkoutSessionExerciseDto> exercises)
         {
             var session = await _db.WorkoutSessions
                 .Include(s => s.Exercises)
@@ -135,6 +138,7 @@ namespace Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
+        //TODO convert to dapper 
 
         public async Task<WorkoutSessionDto> StartWorkoutSessionAsync(int templateId)
         {

@@ -4,9 +4,7 @@ using Application.Dashboard.UpdateWeekPlanning;
 using Application.interfaces;
 using Application.Plans.GetPlansWithProgress;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Data;
+
 
 namespace Infrastructure.Repositories
 {

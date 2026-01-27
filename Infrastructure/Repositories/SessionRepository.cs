@@ -2,6 +2,7 @@
 using Application.WorkoutSession.FinishWorkoutSession;
 using Application.WorkoutSession.GetWorkoutInfo;
 using Application.WorkoutSession.StartWorkoutSession;
+using Dapper;
 using Domain.Entities.WorkoutSession;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,22 +11,22 @@ namespace Infrastructure.Repositories
     public class SessionRepository : ISessionCommandRepository, ISessionQueryRepository
     {
         private readonly AppDbContext _db;
+        private readonly IDbConnectionFactory _connectionFactory;
 
-        public SessionRepository(AppDbContext db)
+        public SessionRepository(AppDbContext db, IDbConnectionFactory connectionFactory)
         {
             _db = db;
+            _connectionFactory = connectionFactory; 
         }
 
         public async Task DeleteWorkoutSessionAsync(int sessionId)
         {
-            var session = await _db.WorkoutSessions
-                .FirstOrDefaultAsync(s => s.Id == sessionId);
+            using var connection = _connectionFactory.CreateConnection();
+            connection.Open();
 
-            if (session == null)
-                return;
+            var query = @"DELETE FROM WorkoutSession WHERE Id = @Id";
 
-            _db.WorkoutSessions.Remove(session);
-            await _db.SaveChangesAsync();
+            await connection.QueryAsync(query, new { Id = sessionId }); 
         }
 
 

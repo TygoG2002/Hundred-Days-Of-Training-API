@@ -1,5 +1,4 @@
 ﻿using Application.Days.CompleteDay;
-using Application.Days.GetDayProgress;
 using Application.Days.GetDays;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +26,7 @@ namespace HundredDays.Api.Controllers
         }
 
 
-        [HttpGet("{planId}/days/{day}/progress")]
-        public async Task<IActionResult> GetDayProgress(int planId, int day)
-        {
-            var result = await _mediator.Send(
-                new GetDayProgressQuery(planId, day));
-
-            return Ok(result);
-        }
+       
 
         [HttpPost("Completed")]
         public async Task<IActionResult> CompleteDay([FromBody] CompleteDayRequest request )

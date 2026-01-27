@@ -1,5 +1,4 @@
-﻿using Application.Days.GetDayProgress;
-using Application.Days.GetDays;
+﻿using Application.Days.GetDays;
 using Application.Plans.GetPlansOverview;
 using Application.Sets.GetSets;
 using HundredDays.Application.Plans.GetPlans;

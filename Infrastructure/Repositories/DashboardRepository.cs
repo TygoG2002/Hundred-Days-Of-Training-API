@@ -49,22 +49,19 @@ namespace Infrastructure.Repositories
             using var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
-            const string query = """
-               SELECT DISTINCT
+            const string query = @"
+               SELECT
             p.Id,
-            p.Name
+            p.Name,
+            COUNT(d.Id) AS TotalDays,
+            SUM(CASE WHEN d.CompletedAt IS NOT NULL THEN 1 ELSE 0 END) AS CompletedDays
         FROM WorkoutPlans p
-        JOIN WorkoutDays d 
+        JOIN WorkoutDays d
             ON d.WorkoutPlanId = p.Id
-        GROUP BY p.Id, p.Name
-        HAVING
-            SUM(d.CompletedAt IS NULL) > 0
-            AND SUM(
-                d.CompletedAt IS NOT NULL
-                AND DATE(d.CompletedAt) = CURDATE()
-            ) = 0;
-        
-        """;
+        GROUP BY
+            p.Id,
+            p.Name;
+        ";
 
             var result = await connection.QueryAsync<PlanOverviewDto>(query);
             return result.ToList();

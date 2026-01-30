@@ -3,8 +3,7 @@ using MediatR;
 
 namespace Application.Dashboard.GetTodaysWorkouts
 {
-    public class GetTodayWorkoutsHandler
-        : IRequestHandler<GetTodayWorkoutsQuery, TodayDashboardDto>
+    public class GetTodayWorkoutsHandler : IRequestHandler<GetTodayWorkoutsQuery, TodayDashboardDto>
     {
         private readonly IDashboardQueryRepository _dashboardRepository;
 

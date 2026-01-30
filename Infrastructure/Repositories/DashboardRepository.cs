@@ -4,6 +4,7 @@ using Application.Dashboard.UpdateWeekPlanning;
 using Application.interfaces;
 using Application.Plans.GetPlansWithProgress;
 using Dapper;
+using Microsoft.Extensions.Internal;
 
 
 namespace Infrastructure.Repositories
@@ -86,7 +87,24 @@ namespace Infrastructure.Repositories
                 """;
 
             var result = await connection.QueryAsync<GetWeekPlanningDto>(query);
-            connection.Close();
+            return result.ToList();
+        }
+
+        public async Task<List<DayOfWeek>> GetWeekProgressAsync()
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            connection.Open();
+
+       
+
+            var query = @"SELECT DISTINCT DayOfWeek
+            FROM WorkoutSession
+            WHERE FinishedAt IS NOT NULL
+            AND DayOfWeek IS NOT NULL
+            AND YEARWEEK(FinishedAt, 1) = YEARWEEK(CURDATE(), 1);
+";
+
+            var result = await connection.QueryAsync<DayOfWeek>(query);
             return result.ToList();
         }
 

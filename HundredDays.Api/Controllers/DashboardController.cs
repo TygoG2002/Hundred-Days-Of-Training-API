@@ -1,5 +1,6 @@
 ﻿using Application.Dashboard.GetTodaysWorkouts;
 using Application.Dashboard.GetWeekPlanningWorkouts;
+using Application.Dashboard.GetWeekProgress;
 using Application.Dashboard.UpdateWeekPlanning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,12 +32,17 @@ public class DashboardController : ControllerBase
     }
 
     [HttpPut("updatePlanning")]
-    public async Task<IActionResult> UpdateWeekPlanning(
-    [FromBody] UpdateWeekPlanningDto request)
+    public async Task<IActionResult> UpdateWeekPlanning([FromBody] UpdateWeekPlanningDto request)
     {
         await _mediator.Send(new UpdateWeekPlanningCommand(request));
         return NoContent();
     }
 
+    [HttpGet("progress")]
+    public async Task<IActionResult> GetWeekProgress()
+    {
+        var result = await _mediator.Send(new GetWeekProgressQuery());
+        return Ok(result);
+    }
 
 }

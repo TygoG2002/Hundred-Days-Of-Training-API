@@ -83,3 +83,7 @@ Content-Type: application/json
 {
   "amount": 500
 }
+
+
+###
+GET {{baseUrl}}/api/dashboard/progress

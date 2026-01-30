@@ -14,7 +14,9 @@ namespace Application.interfaces
         Task<List<PlanOverviewDto>> GetTodayWorkoutsAsync();
         Task<List<TodayTemplateDto>> GetTodayTemplatesAsync();
         Task<List<GetWeekPlanningDto>> GetWeekPlanningAsync();
-    }
+
+        Task<List<DayOfWeek>> GetWeekProgressAsync(); 
+     }
 
 
 }
